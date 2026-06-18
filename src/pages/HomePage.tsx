@@ -1,6 +1,7 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { RiArrowRightLine, RiStarFill, RiArrowRightUpLine, RiUser3Line } from 'react-icons/ri';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import AnimSection from '../components/AnimSection';
 import { stats, courses, testimonials, teachers } from '../data';
 
@@ -9,6 +10,7 @@ const TECHS = ['React', 'TypeScript', 'Node.js', 'Python', 'Figma', 'PostgreSQL'
 export default function HomePage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (location.hash) {
@@ -20,6 +22,15 @@ export default function HomePage() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [location.pathname, location.hash]);
+
+  const whyItems = [
+    { n: '01', title: t('home.why.w1t'), text: t('home.why.w1d') },
+    { n: '02', title: t('home.why.w2t'), text: t('home.why.w2d') },
+    { n: '03', title: t('home.why.w3t'), text: t('home.why.w3d') },
+    { n: '04', title: t('home.why.w4t'), text: t('home.why.w4d') },
+    { n: '05', title: t('home.why.w5t'), text: t('home.why.w5d') },
+    { n: '06', title: t('home.why.w6t'), text: t('home.why.w6d') },
+  ];
 
   return (
     <main className="overflow-x-hidden bg-[#07080F] text-white">
@@ -37,35 +48,35 @@ export default function HomePage() {
           <div>
             <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#A78BFA] border border-[#6D28D9]/40 bg-[#6D28D9]/10 px-3 py-1.5 rounded-full mb-7 tracking-widest uppercase">
               <span className="w-1.5 h-1.5 rounded-full bg-[#A855F7] animate-pulse" />
-              Набор открыт — Январь 2025
+              {t('home.badge')}
             </div>
 
             <h1 className="text-5xl sm:text-6xl font-black leading-[1.05] mb-6 tracking-tight">
-              Стань<br />
+              {t('home.hero1')}<br />
               <span className="relative inline-block">
                 <span style={{ background: 'linear-gradient(90deg, #A855F7 0%, #C084FC 50%, #7C3AED 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-                  разработчиком
+                  {t('home.hero2')}
                 </span>
                 <svg className="absolute -bottom-1 left-0 w-full" height="8" viewBox="0 0 300 8" fill="none">
                   <path d="M2 6 Q75 2 150 5 Q225 8 298 3" stroke="#7C3AED" strokeWidth="2.5" strokeLinecap="round" opacity="0.7"/>
                 </svg>
               </span>
-              <br />за 6 месяцев
+              <br />{t('home.hero3')}
             </h1>
 
             <p className="text-[#94A3B8] text-base leading-relaxed mb-8 max-w-sm">
-              Практическое обучение, реальные проекты, менторы из индустрии — и поддержка до первого оффера.
+              {t('home.heroSub')}
             </p>
 
             <div className="flex items-center gap-4 mb-10">
               <Link to="/courses"
                 className="flex items-center gap-2 px-6 py-3.5 rounded-2xl text-sm font-bold text-white transition-all duration-200 hover:scale-[1.04] hover:brightness-110 active:scale-[0.97]"
                 style={{ background: 'linear-gradient(135deg, #6D28D9, #9333EA)' }}>
-                Начать обучение
+                {t('cta.startLearning')}
                 <RiArrowRightLine size={16} />
               </Link>
               <Link to="/about" className="text-sm text-[#7C3AED] font-semibold hover:text-[#A855F7] transition-colors flex items-center gap-1">
-                Узнать больше <RiArrowRightUpLine size={14} />
+                {t('cta.learnMore')} <RiArrowRightUpLine size={14} />
               </Link>
             </div>
 
@@ -144,9 +155,9 @@ export default function HomePage() {
       <div className="border-y border-[#1E1B3A] bg-[#0A0B1A] py-4 overflow-hidden">
         <style>{`@keyframes marquee-scroll { from { transform: translateX(0) } to { transform: translateX(-50%) } }`}</style>
         <div className="flex gap-10 whitespace-nowrap" style={{ animation: 'marquee-scroll 28s linear infinite' }}>
-          {[...TECHS, ...TECHS].map((t, i) => (
+          {[...TECHS, ...TECHS].map((tech, i) => (
             <span key={i} className="text-sm font-semibold text-[#334155] hover:text-[#A855F7] transition-colors cursor-default flex items-center gap-2.5 shrink-0">
-              <span className="w-1 h-1 rounded-full bg-[#6D28D9]" />{t}
+              <span className="w-1 h-1 rounded-full bg-[#6D28D9]" />{tech}
             </span>
           ))}
         </div>
@@ -157,11 +168,11 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <AnimSection className="flex flex-col sm:flex-row sm:items-end justify-between mb-14 gap-4">
             <div>
-              <p className="text-[#6D28D9] text-xs font-bold uppercase tracking-widest mb-2">Курсы</p>
-              <h2 className="text-3xl sm:text-4xl font-black">Выбери направление</h2>
+              <p className="text-[#6D28D9] text-xs font-bold uppercase tracking-widest mb-2">{t('home.sectionCourses')}</p>
+              <h2 className="text-3xl sm:text-4xl font-black">{t('home.sectionCoursesTitle')}</h2>
             </div>
             <Link to="/courses" className="text-sm text-[#7C3AED] font-semibold hover:text-[#A855F7] transition-colors flex items-center gap-1 shrink-0">
-              Все программы <RiArrowRightLine size={14} />
+              {t('home.allPrograms')} <RiArrowRightLine size={14} />
             </Link>
           </AnimSection>
 
@@ -171,11 +182,11 @@ export default function HomePage() {
                 <div
                   role="button"
                   tabIndex={0}
-                  onClick={() => navigate(`/courses#course-${course.id}`)}
+                  onClick={() => navigate('/courses')}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
-                      navigate(`/courses#course-${course.id}`);
+                      navigate('/courses');
                     }
                   }}
                   className="group flex items-center gap-6 rounded-2xl border border-[#1E1B3A] bg-[#0D0B1E] px-6 py-5 hover:border-[#7C3AED]/50 hover:bg-[#110D2A] transition-all duration-300 cursor-pointer"
@@ -195,15 +206,15 @@ export default function HomePage() {
                   </div>
                   <div className="hidden sm:flex items-center gap-8 shrink-0">
                     <div className="text-right">
-                      <p className="text-[10px] text-[#334155] uppercase tracking-wider">Длит.</p>
+                      <p className="text-[10px] text-[#334155] uppercase tracking-wider">{t('home.duration')}</p>
                       <p className="text-sm font-semibold text-white">{course.duration}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-[10px] text-[#334155] uppercase tracking-wider">Уровень</p>
+                      <p className="text-[10px] text-[#334155] uppercase tracking-wider">{t('home.level')}</p>
                       <p className="text-sm font-semibold text-[#A855F7]">{course.level}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-[10px] text-[#334155] uppercase tracking-wider">Цена</p>
+                      <p className="text-[10px] text-[#334155] uppercase tracking-wider">{t('home.price')}</p>
                       <p className="text-sm font-bold text-white">{course.price}</p>
                     </div>
                   </div>
@@ -219,19 +230,12 @@ export default function HomePage() {
       <section className="py-24 bg-[#07080F]">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <AnimSection className="text-center mb-16">
-            <p className="text-[#6D28D9] text-xs font-bold uppercase tracking-widest mb-2">Преимущества</p>
-            <h2 className="text-3xl sm:text-4xl font-black">Почему нас выбирают</h2>
+            <p className="text-[#6D28D9] text-xs font-bold uppercase tracking-widest mb-2">{t('home.sectionWhy')}</p>
+            <h2 className="text-3xl sm:text-4xl font-black">{t('home.sectionWhyTitle')}</h2>
           </AnimSection>
 
           <div className="grid md:grid-cols-2 gap-x-20 gap-y-10">
-            {[
-              { n: '01', title: 'Практика с первого дня', text: 'Никакой лишней теории. Сразу код, проекты и задачи из реальной индустрии.' },
-              { n: '02', title: 'Менторы из компаний', text: 'Все преподаватели — действующие разработчики. Они знают рынок изнутри.' },
-              { n: '03', title: 'Карьерный центр', text: 'Готовим резюме, портфолио и сопровождаем до оффера.' },
-              { n: '04', title: 'Гибкий формат', text: 'Очно или онлайн. Утром или вечером. Под твой график.' },
-              { n: '05', title: 'Международный сертификат', text: 'Документ, который признают работодатели не только в Кыргызстане.' },
-              { n: '06', title: 'Сильное комьюнити', text: 'Сеть из 500+ выпускников и партнёрских компаний открывает двери.' },
-            ].map(({ n, title, text }, i) => (
+            {whyItems.map(({ n, title, text }, i) => (
               <AnimSection key={n} delay={i * 70}>
                 <div className="flex gap-5 group">
                   <span className="text-5xl font-black text-[#1E1B3A] group-hover:text-[#6D28D9]/30 transition-colors duration-300 leading-none shrink-0 font-mono select-none">{n}</span>
@@ -251,11 +255,11 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <AnimSection className="flex flex-col gap-4 sm:flex-row sm:items-end justify-between mb-14">
             <div>
-              <p className="text-[#6D28D9] text-xs font-bold uppercase tracking-widest mb-2">Учителя</p>
-              <h2 className="text-3xl sm:text-4xl font-black">Наши преподаватели</h2>
+              <p className="text-[#6D28D9] text-xs font-bold uppercase tracking-widest mb-2">{t('home.sectionTeachers')}</p>
+              <h2 className="text-3xl sm:text-4xl font-black">{t('home.sectionTeachersTitle')}</h2>
             </div>
             <Link to="/teachers" className="text-sm text-[#7C3AED] font-semibold hover:text-[#A855F7] transition-colors flex items-center gap-1 shrink-0">
-              Все преподаватели <RiArrowRightLine size={14} />
+              {t('home.allTeachers')} <RiArrowRightLine size={14} />
             </Link>
           </AnimSection>
 
@@ -285,7 +289,7 @@ export default function HomePage() {
                   <p className="text-[#c7d2fe] text-sm leading-relaxed mb-7 flex-1">{teacher.bio}</p>
 
                   <div className="mb-8 space-y-2.5">
-                    <p className="text-white text-xs font-semibold mb-3">Специализация</p>
+                    <p className="text-white text-xs font-semibold mb-3">{t('home.specialization')}</p>
                     <div className="flex flex-wrap gap-2">
                       {teacher.subjects.map(subject => (
                         <span key={subject} className="rounded-full border border-[#2b1b52] bg-[#100f26] px-4 py-2 text-xs text-[#dbeafe] font-medium transition-all duration-300 group-hover:border-[#7C3AED]/40 group-hover:bg-[#131127]">
@@ -303,7 +307,7 @@ export default function HomePage() {
                       to="/contact"
                       className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#7C3AED] to-[#a855f7] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_12px_30px_rgba(124,58,237,0.30)] transition-all duration-300 hover:-translate-y-1 hover:brightness-110 w-full"
                     >
-                      Записаться на курс
+                      {t('cta.signUpToClass')}
                     </Link>
                   </div>
                 </div>
@@ -317,27 +321,27 @@ export default function HomePage() {
       <section className="py-24 bg-[#07080F]">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <AnimSection className="text-center mb-14">
-            <p className="text-[#6D28D9] text-xs font-bold uppercase tracking-widest mb-2">Отзывы</p>
-            <h2 className="text-3xl sm:text-4xl font-black">Говорят выпускники</h2>
+            <p className="text-[#6D28D9] text-xs font-bold uppercase tracking-widest mb-2">{t('home.sectionTestimonials')}</p>
+            <h2 className="text-3xl sm:text-4xl font-black">{t('home.sectionTestimonialsTitle')}</h2>
           </AnimSection>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {testimonials.map((t, i) => (
-              <AnimSection key={t.name} delay={i * 100}>
+            {testimonials.map((item, i) => (
+              <AnimSection key={item.name} delay={i * 100}>
                 <div className="relative rounded-3xl border border-[#1E1B3A] bg-[#0D0B1E] p-7 flex flex-col gap-5 h-full hover:border-[#7C3AED]/40 transition-all duration-300 group overflow-hidden">
                   <span className="absolute top-3 right-5 text-7xl font-black text-[#1E1B3A] group-hover:text-[#6D28D9]/20 transition-colors select-none leading-none pointer-events-none">"</span>
                   <div className="flex gap-0.5">
                     {[...Array(5)].map((_, idx) => <RiStarFill key={idx} className="text-[#7C3AED]" size={13} />)}
                   </div>
-                  <p className="text-[#94A3B8] text-sm leading-relaxed flex-1 relative z-10">"{t.text}"</p>
+                  <p className="text-[#94A3B8] text-sm leading-relaxed flex-1 relative z-10">"{item.text}"</p>
                   <div className="flex items-center gap-3 pt-4 border-t border-[#1E1B3A]">
                     <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-black text-white shrink-0"
                       style={{ background: 'linear-gradient(135deg, #6D28D9, #A855F7)' }}>
                       <RiUser3Line size={18} className="text-white" />
                     </div>
                     <div>
-                      <p className="text-white text-sm font-semibold">{t.name}</p>
-                      <p className="text-[#475569] text-xs">{t.role}</p>
+                      <p className="text-white text-sm font-semibold">{item.name}</p>
+                      <p className="text-[#475569] text-xs">{item.role}</p>
                     </div>
                   </div>
                 </div>
@@ -361,17 +365,17 @@ export default function HomePage() {
               <div className="relative py-16 px-8 sm:px-16 text-center">
                 <div className="inline-flex items-center gap-2 text-xs font-bold text-[#CBD5E1] border border-[#7C3AED]/15 bg-white/5 px-3 py-1.5 rounded-full mb-6 uppercase tracking-widest">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#CBD5E1] animate-pulse" />
-                  Бесплатная консультация
+                  {t('home.ctaBadge')}
                 </div>
                 <h2 className="text-3xl sm:text-5xl font-black text-white mb-4 leading-tight">
-                  Готов запустить<br />карьеру в IT?
+                  {t('home.ctaTitle')}
                 </h2>
                 <p className="text-[#94A3B8] mb-8 max-w-sm mx-auto text-sm leading-relaxed">
-                  Запишись — подберём курс под твои цели и уровень подготовки.
+                  {t('home.ctaSub')}
                 </p>
                 <Link to="/contact"
                   className="inline-flex items-center gap-2 bg-white text-[#5B21B6] px-8 py-4 rounded-2xl text-sm font-black hover:bg-purple-50 transition-all duration-200 hover:scale-[1.03] active:scale-[0.97]">
-                  Записаться бесплатно
+                  {t('cta.enrollFree')}
                   <RiArrowRightLine size={16} />
                 </Link>
               </div>

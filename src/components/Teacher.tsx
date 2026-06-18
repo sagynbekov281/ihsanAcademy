@@ -1,10 +1,12 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { RiArrowLeftLine, RiArrowRightLine, RiUser3Line } from 'react-icons/ri';
+import { useTranslation } from 'react-i18next';
 import AnimSection from '../components/AnimSection';
 import { teachers } from '../data';
 
 export default function TeachersPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <main className="min-h-screen bg-[#07080F] text-white pt-28 pb-24 background: 'linear-gradient(135deg, #1a0533 0%, #0f0a2e 40%, #1e0a3c 70%, #0d0520 100%)'">
@@ -17,17 +19,17 @@ export default function TeachersPage() {
             className="inline-flex items-center gap-2 text-sm text-[#7C3AED] hover:text-[#A855F7] transition-colors mb-10"
           >
             <RiArrowLeftLine size={16} />
-            На главную
+            {t('teachers.backHome')}
           </Link>
         </AnimSection>
 
         {/* Header */}
         <AnimSection>
           <div className="mb-16">
-            <p className="text-[#6D28D9] text-xs font-bold uppercase tracking-widest mb-3">Команда</p>
-            <h1 className="text-4xl sm:text-5xl font-black mb-4">Наши преподаватели</h1>
+            <p className="text-[#6D28D9] text-xs font-bold uppercase tracking-widest mb-3">{t('teachers.tag')}</p>
+            <h1 className="text-4xl sm:text-5xl font-black mb-4">{t('teachers.title')}</h1>
             <p className="text-[#94A3B8] text-base max-w-xl leading-relaxed">
-              Опытные менторы с реальным опытом в индустрии. Они не просто учат — они помогают строить карьеру.
+              {t('teachers.description')}
             </p>
           </div>
         </AnimSection>
@@ -63,7 +65,7 @@ export default function TeachersPage() {
 
                 {/* Subjects */}
                 <div className="mb-6">
-                  <p className="text-white text-xs font-semibold mb-3">Специализация</p>
+                  <p className="text-white text-xs font-semibold mb-3">{t('teachers.specialization')}</p>
                   <div className="flex flex-wrap gap-2">
                     {teacher.subjects.map(subject => (
                       <span
@@ -85,10 +87,10 @@ export default function TeachersPage() {
                     to="/contact"
                     className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#7C3AED] to-[#a855f7] px-5 py-3 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(124,58,237,0.25)] transition-all duration-300 hover:brightness-110"
                   >
-                    Записаться
+                    {t('teachers.enroll')}
                   </Link>
                   <span className="flex items-center gap-1 text-xs text-[#475569] group-hover:text-[#A855F7] transition-colors">
-                    Подробнее <RiArrowRightLine size={13} className="group-hover:translate-x-0.5 transition-transform" />
+                    {t('teachers.details')} <RiArrowRightLine size={13} className="group-hover:translate-x-0.5 transition-transform" />
                   </span>
                 </div>
               </div>
@@ -102,16 +104,16 @@ export default function TeachersPage() {
             <div className="absolute top-0 right-0 w-72 h-72 rounded-full bg-[#A855F7]/10 blur-[80px] pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-56 h-56 rounded-full bg-[#6D28D9]/10 blur-[60px] pointer-events-none" />
             <div className="relative">
-              <p className="text-[#6D28D9] text-xs font-bold uppercase tracking-widest mb-3">Готов начать?</p>
-              <h2 className="text-2xl sm:text-4xl font-black text-white mb-4">Учись у лучших</h2>
+              <p className="text-[#6D28D9] text-xs font-bold uppercase tracking-widest mb-3">{t('teachers.ctaTag')}</p>
+              <h2 className="text-2xl sm:text-4xl font-black text-white mb-4">{t('teachers.ctaTitle')}</h2>
               <p className="text-[#94A3B8] mb-8 max-w-sm mx-auto text-sm leading-relaxed">
-                Запишись на консультацию — подберём преподавателя и курс под твои цели.
+                {t('teachers.ctaSub')}
               </p>
               <Link
                 to="/contact"
                 className="inline-flex items-center gap-2 bg-white text-[#5B21B6] px-8 py-4 rounded-2xl text-sm font-black hover:bg-purple-50 transition-all duration-200 hover:scale-[1.03] active:scale-[0.97]"
               >
-                Бесплатная консультация
+                {t('teachers.ctaBtn')}
                 <RiArrowRightLine size={16} />
               </Link>
             </div>

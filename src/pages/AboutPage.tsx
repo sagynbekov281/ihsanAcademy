@@ -2,27 +2,36 @@ import AnimSection from '../components/AnimSection';
 import { stats } from '../data';
 import { Link } from 'react-router-dom';
 import { RiArrowRightLine, RiUser3Line } from 'react-icons/ri';
+import { useTranslation } from 'react-i18next';
 
 const team = [
-  { name: 'Ихсан Усупов',      role: 'Основатель & CEO',         exp: '8 лет в разработке',       },
-  { name: 'Айбек Джакыпов',    role: 'Ведущий преподаватель',    exp: 'Senior Frontend Dev',         },
-  { name: 'Нурлан Сатывалдиев',role: 'Backend ментор',           exp: '6 лет Node.js / Python',     },
-  { name: 'Зарина Асанова',    role: 'UX/UI ментор',             exp: 'Product Designer @ Agency',   },
+  { name: 'Ихсан Усупов',       role: 'Основатель & CEO',      exp: '8 лет в разработке'     },
+  { name: 'Айбек Джакыпов',     role: 'Ведущий преподаватель', exp: 'Senior Frontend Dev'    },
+  { name: 'Нурлан Сатывалдиев', role: 'Backend ментор',        exp: '6 лет Node.js / Python' },
+  { name: 'Зарина Асанова',     role: 'UX/UI ментор',          exp: 'Product Designer @ Agency' },
 ];
 
 export default function AboutPage() {
+  const { t } = useTranslation();
+
+  const processSteps = [
+    { step: '01', title: t('about.process.s1title'), text: t('about.process.s1text') },
+    { step: '02', title: t('about.process.s2title'), text: t('about.process.s2text') },
+    { step: '03', title: t('about.process.s3title'), text: t('about.process.s3text') },
+    { step: '04', title: t('about.process.s4title'), text: t('about.process.s4text') },
+  ];
+
   return (
     <main className="min-h-screen pt-24">
       <div className="max-w-6xl mx-auto px-5 sm:px-8 py-10">
         {/* Header */}
         <AnimSection className="max-w-2xl mb-14">
-          <p className="text-[#7B7FE8] text-xs font-semibold uppercase tracking-widest mb-2">О нас</p>
+          <p className="text-[#7B7FE8] text-xs font-semibold uppercase tracking-widest mb-2">{t('about.tag')}</p>
           <h1 className="font-display text-3xl sm:text-4xl font-bold text-white mb-4">
-            Академия, которая меняет карьеры
+            {t('about.title')}
           </h1>
           <p className="text-[#7A82A8] leading-relaxed text-sm sm:text-base">
-            IhsanAcademy основана в 2021 году с одной целью — дать каждому возможность войти в IT. 
-            Мы учим не просто коду, а профессиональному мышлению и навыкам, которые нужны рынку прямо сейчас.
+            {t('about.description')}
           </p>
         </AnimSection>
 
@@ -40,17 +49,17 @@ export default function AboutPage() {
         <AnimSection className="mb-14">
           <div className="relative border border-[#5B5BD6]/25 rounded-2xl p-7 sm:p-10 bg-gradient-to-br from-[#5B5BD6]/10 to-transparent overflow-hidden">
             <div className="absolute top-0 left-0 w-32 h-0.5 bg-gradient-to-r from-[#7B7FE8]/70 to-transparent" />
-            <p className="text-[#7B7FE8] text-xs font-semibold uppercase tracking-widest mb-3">Наша миссия</p>
+            <p className="text-[#7B7FE8] text-xs font-semibold uppercase tracking-widest mb-3">{t('about.missionTag')}</p>
             <p className="text-white text-lg sm:text-xl font-display leading-relaxed max-w-2xl">
-              «Сделать IT-образование доступным, практичным и результативным для каждого в Кыргызстане и Центральной Азии.»
+              {t('about.missionText')}
             </p>
           </div>
         </AnimSection>
 
         {/* Team */}
         <AnimSection className="mb-4">
-          <p className="text-[#7B7FE8] text-xs font-semibold uppercase tracking-widest mb-2">Команда</p>
-          <h2 className="font-display text-2xl font-bold text-white mb-8">Наши преподаватели</h2>
+          <p className="text-[#7B7FE8] text-xs font-semibold uppercase tracking-widest mb-2">{t('about.teamTag')}</p>
+          <h2 className="font-display text-2xl font-bold text-white mb-8">{t('about.teamTitle')}</h2>
         </AnimSection>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-14">
           {team.map((m, i) => (
@@ -69,16 +78,11 @@ export default function AboutPage() {
 
         {/* Process */}
         <AnimSection className="mb-4">
-          <p className="text-[#7B7FE8] text-xs font-semibold uppercase tracking-widest mb-2">Процесс</p>
-          <h2 className="font-display text-2xl font-bold text-white mb-8">Как проходит обучение</h2>
+          <p className="text-[#7B7FE8] text-xs font-semibold uppercase tracking-widest mb-2">{t('about.processTag')}</p>
+          <h2 className="font-display text-2xl font-bold text-white mb-8">{t('about.processTitle')}</h2>
         </AnimSection>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-14">
-          {[
-            { step: '01', title: 'Консультация',   text: 'Бесплатная встреча, выбор курса и формата.' },
-            { step: '02', title: 'Обучение',        text: 'Практические занятия 3 раза в неделю с ментором.' },
-            { step: '03', title: 'Проекты',         text: 'Реальные задачи и кейсы для портфолио.' },
-            { step: '04', title: 'Карьера',         text: 'Помощь с резюме, собеседованиями и поиском работы.' },
-          ].map(({ step, title, text }, i) => (
+          {processSteps.map(({ step, title, text }, i) => (
             <AnimSection key={step} delay={i * 80}>
               <div className="border border-[#1E2448] rounded-2xl p-5 bg-[#111428]/80 relative overflow-hidden flex h-full flex-col justify-between">
                 <div>
@@ -93,7 +97,7 @@ export default function AboutPage() {
 
         <AnimSection className="text-center">
           <Link to="/contact" className="btn-primary violet-glow inline-flex items-center justify-center gap-2 mx-auto">
-            Записаться на консультацию
+            {t('about.enrollCta')}
             <RiArrowRightLine size={16} />
           </Link>
         </AnimSection>

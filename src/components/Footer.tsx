@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { RiCodeSSlashLine, RiTelegramLine, RiInstagramLine, RiWhatsappLine, RiMapPinLine, RiPhoneLine, RiMailLine, RiTimeLine } from 'react-icons/ri';
 
 export default function Footer() {
+  const { t } = useTranslation();
+
   return (
     <footer className="border-t border-[#7C3AED]/15 bg-[#05060F]">
       <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-14 pb-8">
@@ -20,7 +23,7 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-[#475569] text-sm leading-relaxed mb-5">
-              IT-академия нового поколения в Бишкеке. Учим профессиям будущего.
+              {t('footer.description')}
             </p>
             <div className="flex gap-2">
               {[
@@ -41,12 +44,12 @@ export default function Footer() {
 
           {/* Navigation */}
           <div>
-            <p className="text-white text-sm font-semibold mb-4">Навигация</p>
+            <p className="text-white text-sm font-semibold mb-4">{t('footer.navigation')}</p>
             <ul className="space-y-2.5">
-              {[['/', 'Главная'], ['/courses', 'Курсы'], ['/about', 'О нас'], ['/contact', 'Контакты']].map(([to, label]) => (
-                <li key={to}>
-                  <Link to={to} className="text-[#475569] text-sm hover:text-[#A855F7] transition-colors duration-200">
-                    {label}
+              {[['/', t('nav.home')], ['/courses', t('nav.courses')], ['/about', t('nav.about')], ['/contact', t('nav.contact')]].map(([to, label]) => (
+                <li key={to as string}>
+                  <Link to={to as string} className="text-[#475569] text-sm hover:text-[#A855F7] transition-colors duration-200">
+                    {label as string}
                   </Link>
                 </li>
               ))}
@@ -55,9 +58,16 @@ export default function Footer() {
 
           {/* Courses */}
           <div>
-            <p className="text-white text-sm font-semibold mb-4">Курсы</p>
+            <p className="text-white text-sm font-semibold mb-4">{t('footer.courses')}</p>
             <ul className="space-y-2.5">
-              {['Frontend', 'Backend', 'UI/UX Дизайн', 'Data Science', 'Кибербезопасность', 'Mobile Dev'].map(c => (
+              {([
+                t('contact.courses.frontend'),
+                t('contact.courses.backend'),
+                t('contact.courses.uiux'),
+                t('contact.courses.data'),
+                t('contact.courses.cyber'),
+                t('contact.courses.mobile'),
+              ]).map(c => (
                 <li key={c}>
                   <Link to="/courses" className="text-[#475569] text-sm hover:text-[#A855F7] transition-colors duration-200">
                     {c}
@@ -69,13 +79,13 @@ export default function Footer() {
 
           {/* Contacts */}
           <div>
-            <p className="text-white text-sm font-semibold mb-4">Контакты</p>
+            <p className="text-white text-sm font-semibold mb-4">{t('footer.contacts')}</p>
             <ul className="space-y-3">
               {[
-                { Icon: RiMapPinLine, text: 'Бишкек, ул. Манаса 40' },
-                { Icon: RiPhoneLine, text: '+996 700 123 456' },
-                { Icon: RiMailLine, text: 'info@ihsanacademy.kg' },
-                { Icon: RiTimeLine, text: 'Пн–Пт: 9:00–19:00' },
+                { Icon: RiMapPinLine, text: t('footer.address') },
+                { Icon: RiPhoneLine,  text: t('contact.phone') },
+                { Icon: RiMailLine,   text: t('contact.email') },
+                { Icon: RiTimeLine,   text: t('footer.hours') },
               ].map(({ Icon, text }) => (
                 <li key={text} className="flex items-start gap-2.5 text-[#475569] text-sm">
                   <Icon size={15} className="text-[#7C3AED] shrink-0 mt-0.5" />
@@ -88,8 +98,8 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="border-t border-[#7C3AED]/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <p className="text-[#334155] text-xs">© 2024 IhsanAcademy. Все права защищены.</p>
-          <p className="text-[#334155] text-xs">Бишкек, Кыргызстан 🇰🇬</p>
+          <p className="text-[#334155] text-xs">{t('footer.rights')}</p>
+          <p className="text-[#334155] text-xs">{t('footer.location')}</p>
         </div>
       </div>
     </footer>

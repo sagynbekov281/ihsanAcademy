@@ -10,7 +10,7 @@ export const courses: Array<{ id: number; title: string; description: string; du
     level: 'Начинающий',
     price: '12 000 сом/мес',
     icon: RiReactjsLine,
-    topics: ['HTML & CSS', 'JavaScript ES6+', 'React + TypeScript', 'Git & GitHub'],
+    topics: ['HTML и CSS', 'JavaScript ES6+', 'React + TypeScript', 'Git и GitHub'],
   },
   {
     id: 2,
@@ -30,7 +30,7 @@ export const courses: Array<{ id: number; title: string; description: string; du
     level: 'Начинающий',
     price: '10 000 сом/мес',
     icon: RiBrushLine,
-    topics: ['Figma', 'UX Research', 'Wireframing', 'Design Systems'],
+    topics: ['Figma', 'UX-исследования', 'Прототипирование', 'Системы дизайна'],
   },
   {
     id: 4,
@@ -40,7 +40,7 @@ export const courses: Array<{ id: number; title: string; description: string; du
     level: 'Продвинутый',
     price: '15 000 сом/мес',
     icon: RiBarChartLine,
-    topics: ['Python', 'NumPy / Pandas', 'ML / Deep Learning', 'TensorFlow'],
+    topics: ['Python', 'NumPy / Pandas', 'ML / Глубинное обучение', 'TensorFlow'],
   },
   {
     id: 5,
@@ -50,7 +50,7 @@ export const courses: Array<{ id: number; title: string; description: string; du
     level: 'Средний',
     price: '14 000 сом/мес',
     icon: RiShieldCheckLine,
-    topics: ['Linux', 'Penetration Testing', 'CTF', 'Network Security'],
+    topics: ['Linux', 'Тестирование на проникновение', 'CTF', 'Безопасность сети'],
   },
   {
     id: 6,
@@ -60,7 +60,7 @@ export const courses: Array<{ id: number; title: string; description: string; du
     level: 'Средний',
     price: '13 000 сом/мес',
     icon: RiSmartphoneLine,
-    topics: ['React Native', 'Flutter', 'iOS & Android', 'App Store Deploy'],
+    topics: ['React Native', 'Flutter', 'iOS и Android', 'Публикация в App Store'],
   },
 ];
 

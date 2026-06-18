@@ -1,20 +1,22 @@
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { RiArrowLeftLine, RiArrowRightLine, RiUser3Line, RiCheckLine } from 'react-icons/ri';
+import { useTranslation } from 'react-i18next';
 import AnimSection from '../components/AnimSection';
 import { teachers } from '../data';
 
 export default function TeacherPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const teacher = teachers.find(t => t.id === Number(id));
 
   if (!teacher) {
     return (
       <main className="min-h-screen bg-[#07080F] text-white flex items-center justify-center">
         <div className="text-center">
-          <p className="text-[#475569] text-lg mb-6">Преподаватель не найден</p>
+          <p className="text-[#475569] text-lg mb-6">{t('teachers.notFound')}</p>
           <Link to="/teachers" className="text-[#7C3AED] hover:text-[#A855F7] transition-colors flex items-center gap-2 justify-center">
-            <RiArrowLeftLine size={16} /> Все преподаватели
+            <RiArrowLeftLine size={16} /> {t('teachers.backAll')}
           </Link>
         </div>
       </main>
@@ -34,7 +36,7 @@ export default function TeacherPage() {
             className="inline-flex items-center gap-2 text-sm text-[#7C3AED] hover:text-[#A855F7] transition-colors mb-10"
           >
             <RiArrowLeftLine size={16} />
-            Все преподаватели
+            {t('teachers.backAll')}
           </Link>
         </AnimSection>
 
@@ -45,13 +47,11 @@ export default function TeacherPage() {
             <div className="absolute bottom-0 left-0 w-56 h-56 rounded-full bg-[#6D28D9]/8 blur-[60px] pointer-events-none" />
 
             <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-8">
-              {/* Avatar */}
               <div className="grid h-20 w-20 place-items-center rounded-[1.5rem] bg-gradient-to-br from-[#6D28D9] to-[#A855F7] shadow-2xl shadow-[#7C3AED]/30 shrink-0">
                 <RiUser3Line size={32} className="text-white" />
               </div>
 
               <div className="flex-1">
-                {/* Experience badge */}
                 <span className="inline-block rounded-full border border-[#7C3AED]/20 bg-[#131127] px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-[#A78BFA] mb-3">
                   {teacher.experience}
                 </span>
@@ -60,12 +60,10 @@ export default function TeacherPage() {
               </div>
             </div>
 
-            {/* Bio */}
             <p className="text-[#c7d2fe] text-base leading-relaxed mb-8 relative">{teacher.bio}</p>
 
-            {/* Subjects */}
             <div className="mb-8">
-              <p className="text-white text-sm font-semibold mb-3">Специализация</p>
+              <p className="text-white text-sm font-semibold mb-3">{t('teachers.specialization')}</p>
               <div className="flex flex-wrap gap-2">
                 {teacher.subjects.map(subject => (
                   <span
@@ -78,12 +76,11 @@ export default function TeacherPage() {
               </div>
             </div>
 
-            {/* CTA */}
             <Link
               to="/contact"
               className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#7C3AED] to-[#a855f7] px-8 py-4 text-sm font-semibold text-white shadow-[0_12px_30px_rgba(124,58,237,0.30)] transition-all duration-300 hover:-translate-y-1 hover:brightness-110"
             >
-              Записаться к {teacher.name.split(' ')[0]}
+              {t('teachers.enroll')} {teacher.name.split(' ')[0]}
               <RiArrowRightLine size={15} />
             </Link>
           </div>
@@ -92,7 +89,7 @@ export default function TeacherPage() {
         {/* What you'll learn */}
         <AnimSection>
           <div className="rounded-[2rem] border border-[#1E1B3A] bg-[#0D0B1E] p-8 mb-8">
-            <h2 className="text-xl font-black text-white mb-6">Чему вы научитесь</h2>
+            <h2 className="text-xl font-black text-white mb-6">{t('teachers.whatLearn')}</h2>
             <div className="grid sm:grid-cols-2 gap-3">
               {teacher.subjects.map((subject, i) => (
                 <div key={i} className="flex items-center gap-3">
@@ -111,9 +108,9 @@ export default function TeacherPage() {
           <AnimSection>
             <div className="mt-12">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-black text-white">Другие преподаватели</h2>
+                <h2 className="text-xl font-black text-white">{t('teachers.otherTeachers')}</h2>
                 <Link to="/teachers" className="text-sm text-[#7C3AED] hover:text-[#A855F7] transition-colors flex items-center gap-1">
-                  Все <RiArrowRightLine size={13} />
+                  {t('teachers.all')} <RiArrowRightLine size={13} />
                 </Link>
               </div>
               <div className="grid sm:grid-cols-2 gap-5">
