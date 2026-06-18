@@ -3,7 +3,7 @@ import { RiArrowRightLine, RiStarFill, RiArrowRightUpLine, RiUser3Line } from 'r
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import AnimSection from '../components/AnimSection';
-import { stats, courses, testimonials, teachers } from '../data';
+import { getStats, getCourses, getTestimonials, getTeachers } from '../data';
 
 const TECHS = ['React', 'TypeScript', 'Node.js', 'Python', 'Figma', 'PostgreSQL', 'Docker', 'Git', 'Next.js', 'MongoDB', 'Vue.js', 'Django'];
 
@@ -11,6 +11,11 @@ export default function HomePage() {
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
+
+  const stats = getStats(t);
+  const courses = getCourses(t);
+  const testimonials = getTestimonials(t);
+  const teachers = getTeachers(t);
 
   useEffect(() => {
     if (location.hash) {

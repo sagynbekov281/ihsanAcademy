@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { RiArrowRightLine, RiCheckLine, RiTimeLine, RiUserLine, RiCloseLine, RiCodeLine, RiGroupLine, RiMedalLine, RiBookOpenLine } from 'react-icons/ri';
 import { useTranslation } from 'react-i18next';
 import AnimSection from '../components/AnimSection';
-import { courses } from '../data';
+import { getCourses, type Course } from '../data';
 
 // Extra info per course (by index fallback)
 const extras: Record<number, { langs: string[]; students: number; projects: number; about: string }> = {};
@@ -22,15 +22,18 @@ export default function CoursesPage() {
   const [selected, setSelected] = useState<number | null>(null);
   const location = useLocation();
 
+  const courses = getCourses(t);
+
+  const levelOrder = ['beginner', 'intermediate', 'advanced'] as const;
   const levels = [
-    { key: 'all',  label: t('courses.filterAll') },
-    { key: 'Начинающий',  label: 'Начинающий' },
-    { key: 'Средний',     label: 'Средний' },
-    { key: 'Продвинутый', label: 'Продвинутый' },
+    { key: 'all', label: t('courses.filterAll') },
+    ...levelOrder
+      .filter(lk => courses.some((c: Course) => c.levelKey === lk))
+      .map(lk => ({ key: lk, label: courses.find((c: Course) => c.levelKey === lk)!.level })),
   ];
 
-  const filtered = active === 'all' ? courses : courses.filter(c => c.level === active);
-  const selectedCourse = courses.find(c => c.id === selected);
+  const filtered = active === 'all' ? courses : courses.filter((c: Course) => c.levelKey === active);
+  const selectedCourse = courses.find((c: Course) => c.id === selected);
   const selectedExtra = selectedCourse ? (extras[selectedCourse.id] ?? defaultExtras[courses.indexOf(selectedCourse)] ?? defaultExtras[0]) : null;
 
   useEffect(() => {
@@ -79,7 +82,7 @@ export default function CoursesPage() {
 
         {/* Course rows */}
         <div className="space-y-5">
-          {filtered.map((course, i) => {
+          {filtered.map((course: Course, i: number) => {
             const Icon = course.icon;
             const num = String(i + 1).padStart(2, '0');
             const isSelected = selected === course.id;
@@ -115,7 +118,7 @@ export default function CoursesPage() {
                       <div className="flex-1">
                         <p className="text-[#7A82A8] text-sm leading-relaxed line-clamp-2 sm:line-clamp-1 group-hover:text-[#9AA0C0] transition-colors duration-300">{course.description}</p>
                         <div className="mt-3 flex flex-wrap gap-2 md:hidden">
-                          {course.topics.slice(0, 2).map(topic => (
+                          {course.topics.slice(0, 2).map((topic: string) => (
                             <span key={topic} className="flex items-center gap-1 text-xs text-[#9AA0C0] bg-[#181B30] group-hover:bg-[#1E2140] rounded-full px-3 py-1 transition-colors duration-300">
                               <RiCheckLine size={10} className="text-[#5B5BD6]/60" /> {topic}
                             </span>
@@ -124,7 +127,7 @@ export default function CoursesPage() {
                         </div>
                       </div>
                       <div className="hidden lg:flex flex-wrap gap-2 w-48 shrink-0">
-                        {course.topics.slice(0, 3).map(topic => (
+                        {course.topics.slice(0, 3).map((topic: string) => (
                           <span key={topic} className="flex items-center gap-1 text-xs text-[#9AA0C0] bg-[#181B30] group-hover:bg-[#1E2140] rounded-full px-3 py-1 transition-colors duration-300">
                             <RiCheckLine size={10} className="text-[#5B5BD6]/60" /> {topic}
                           </span>
@@ -243,7 +246,7 @@ export default function CoursesPage() {
                     <p className="text-[#7A82A8] text-xs uppercase tracking-widest">{t('courses.program')}</p>
                   </div>
                   <ul className="space-y-2">
-                    {selectedCourse.topics.map(topic => (
+                    {selectedCourse.topics.map((topic: string) => (
                       <li key={topic} className="flex items-center gap-2.5 text-sm text-[#9AA0C0]">
                         <RiCheckLine size={13} className="text-[#5B5BD6]/70 shrink-0" /> {topic}
                       </li>

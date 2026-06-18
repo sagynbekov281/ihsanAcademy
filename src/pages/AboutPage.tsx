@@ -1,5 +1,5 @@
 import AnimSection from '../components/AnimSection';
-import { stats } from '../data';
+import { getStats } from '../data';
 import { Link } from 'react-router-dom';
 import { RiArrowRightLine, RiUser3Line } from 'react-icons/ri';
 import { useTranslation } from 'react-i18next';
@@ -13,6 +13,8 @@ const team = [
 
 export default function AboutPage() {
   const { t } = useTranslation();
+
+  const stats = getStats(t);
 
   const processSteps = [
     { step: '01', title: t('about.process.s1title'), text: t('about.process.s1text') },

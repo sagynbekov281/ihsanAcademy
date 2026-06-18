@@ -30,6 +30,7 @@ export default function Navbar() {
   const changeLanguage = (lang: string) => {
     i18n.changeLanguage(lang);
     setLangDropdown(false);
+    setOpen(false);
   };
 
   useEffect(() => {

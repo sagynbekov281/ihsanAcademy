@@ -2,12 +2,13 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { RiArrowLeftLine, RiArrowRightLine, RiUser3Line, RiCheckLine } from 'react-icons/ri';
 import { useTranslation } from 'react-i18next';
 import AnimSection from '../components/AnimSection';
-import { teachers } from '../data';
+import { getTeachers } from '../data';
 
 export default function TeacherPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const teachers = getTeachers(t);
   const teacher = teachers.find(t => t.id === Number(id));
 
   if (!teacher) {

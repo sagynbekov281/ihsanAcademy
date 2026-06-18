@@ -2,11 +2,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { RiArrowLeftLine, RiArrowRightLine, RiUser3Line } from 'react-icons/ri';
 import { useTranslation } from 'react-i18next';
 import AnimSection from '../components/AnimSection';
-import { teachers } from '../data';
+import { getTeachers } from '../data';
 
 export default function TeachersPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const teachers = getTeachers(t);
 
   return (
     <main className="min-h-screen bg-[#07080F] text-white pt-28 pb-24 background: 'linear-gradient(135deg, #1a0533 0%, #0f0a2e 40%, #1e0a3c 70%, #0d0520 100%)'">

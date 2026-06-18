@@ -1,20 +1,20 @@
 // src/i18n.ts
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import ru from './locales/ru/translation.json'
-import ky from './locales/ky/translation.json'
+import ruTranslation from './locales/ru/translation.json'
+import kyTranslation from './locales/ky/translation.json'
 
 const resources = {
-  ru: { translation: ru },
-  ky: { translation: ky },
+  ru: { translation: ruTranslation },
+  ky: { translation: kyTranslation },
 };
 
 i18n
   .use(initReactI18next)
   .init({
     resources,
-    lng: localStorage.getItem('language') || 'ru',
-    fallbackLng: 'ru',
+    lng: localStorage.getItem('language') || 'ky',
+    fallbackLng: 'ky',
     ns: ['translation'],
     defaultNS: 'translation',
     interpolation: {

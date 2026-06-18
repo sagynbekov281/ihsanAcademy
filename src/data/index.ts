@@ -1,123 +1,150 @@
 import type { IconType } from 'react-icons';
+import type { TFunction } from 'i18next';
 import { RiBarChartLine, RiBrushLine, RiDatabaseLine, RiReactjsLine, RiShieldCheckLine, RiSmartphoneLine } from 'react-icons/ri';
 
-export const courses: Array<{ id: number; title: string; description: string; duration: string; level: string; price: string; icon: IconType; topics: string[] }> = [
+// Защита: если ключ перевода для topics ещё не добавлен в один из языковых файлов,
+// t() с returnObjects вернёт строку (сам ключ), а не массив — это крашит .map() на странице.
+// Поэтому всегда приводим результат к массиву.
+const getTopics = (t: TFunction, key: string): string[] => {
+  const result = t(key, { returnObjects: true }) as unknown;
+  return Array.isArray(result) ? (result as string[]) : [];
+};
+
+export type Course = {
+  id: number;
+  title: string;
+  description: string;
+  duration: string;
+  level: string;
+  levelKey: 'beginner' | 'intermediate' | 'advanced';
+  price: string;
+  icon: IconType;
+  topics: string[];
+};
+
+export const getCourses = (t: TFunction): Course[] => [
   {
     id: 1,
-    title: 'Frontend разработка',
-    description: 'HTML, CSS, JavaScript, React — от нуля до трудоустройства.',
-    duration: '6 месяцев',
-    level: 'Начинающий',
-    price: '12 000 сом/мес',
+    title: t('courses.list.frontend.title'),
+    description: t('courses.list.frontend.description'),
+    duration: t('courses.list.frontend.duration'),
+    level: t('courses.list.frontend.level'),
+    levelKey: 'beginner',
+    price: t('courses.list.frontend.price'),
     icon: RiReactjsLine,
-    topics: ['HTML и CSS', 'JavaScript ES6+', 'React + TypeScript', 'Git и GitHub'],
+    topics: getTopics(t, 'courses.list.frontend.topics'),
   },
   {
     id: 2,
-    title: 'Backend разработка',
-    description: 'Node.js, Python, базы данных и серверная архитектура.',
-    duration: '7 месяцев',
-    level: 'Средний',
-    price: '13 000 сом/мес',
+    title: t('courses.list.backend.title'),
+    description: t('courses.list.backend.description'),
+    duration: t('courses.list.backend.duration'),
+    level: t('courses.list.backend.level'),
+    levelKey: 'intermediate',
+    price: t('courses.list.backend.price'),
     icon: RiDatabaseLine,
-    topics: ['Python / Node.js', 'REST API', 'PostgreSQL', 'Docker'],
+    topics: getTopics(t, 'courses.list.backend.topics'),
   },
   {
     id: 3,
-    title: 'UI/UX Дизайн',
-    description: 'Figma, дизайн-мышление, прототипирование и пользовательский опыт.',
-    duration: '4 месяца',
-    level: 'Начинающий',
-    price: '10 000 сом/мес',
+    title: t('courses.list.uiux.title'),
+    description: t('courses.list.uiux.description'),
+    duration: t('courses.list.uiux.duration'),
+    level: t('courses.list.uiux.level'),
+    levelKey: 'beginner',
+    price: t('courses.list.uiux.price'),
     icon: RiBrushLine,
-    topics: ['Figma', 'UX-исследования', 'Прототипирование', 'Системы дизайна'],
+    topics: getTopics(t, 'courses.list.uiux.topics'),
   },
   {
     id: 4,
-    title: 'Data Science',
-    description: 'Машинное обучение, анализ данных и нейронные сети.',
-    duration: '8 месяцев',
-    level: 'Продвинутый',
-    price: '15 000 сом/мес',
+    title: t('courses.list.data.title'),
+    description: t('courses.list.data.description'),
+    duration: t('courses.list.data.duration'),
+    level: t('courses.list.data.level'),
+    levelKey: 'advanced',
+    price: t('courses.list.data.price'),
     icon: RiBarChartLine,
-    topics: ['Python', 'NumPy / Pandas', 'ML / Глубинное обучение', 'TensorFlow'],
+    topics: getTopics(t, 'courses.list.data.topics'),
   },
   {
     id: 5,
-    title: 'Кибербезопасность',
-    description: 'Защита систем, этичный хакинг и безопасность сетей.',
-    duration: '6 месяцев',
-    level: 'Средний',
-    price: '14 000 сом/мес',
+    title: t('courses.list.cyber.title'),
+    description: t('courses.list.cyber.description'),
+    duration: t('courses.list.cyber.duration'),
+    level: t('courses.list.cyber.level'),
+    levelKey: 'intermediate',
+    price: t('courses.list.cyber.price'),
     icon: RiShieldCheckLine,
-    topics: ['Linux', 'Тестирование на проникновение', 'CTF', 'Безопасность сети'],
+    topics: getTopics(t, 'courses.list.cyber.topics'),
   },
   {
     id: 6,
-    title: 'Мобильная разработка',
-    description: 'React Native и Flutter для создания мобильных приложений.',
-    duration: '5 месяцев',
-    level: 'Средний',
-    price: '13 000 сом/мес',
+    title: t('courses.list.mobile.title'),
+    description: t('courses.list.mobile.description'),
+    duration: t('courses.list.mobile.duration'),
+    level: t('courses.list.mobile.level'),
+    levelKey: 'intermediate',
+    price: t('courses.list.mobile.price'),
     icon: RiSmartphoneLine,
-    topics: ['React Native', 'Flutter', 'iOS и Android', 'Публикация в App Store'],
+    topics: getTopics(t, 'courses.list.mobile.topics'),
   },
 ];
 
-export const stats = [
-  { value: '500+', label: 'Выпускников' },
-  { value: '93%',  label: 'Трудоустройство' },
-  { value: '6',    label: 'Направлений' },
-  { value: '3 г.', label: 'На рынке' },
+export const getStats = (t: TFunction) => [
+  { value: t('stats.graduates.value'), label: t('stats.graduates.label') },
+  { value: t('stats.employment.value'), label: t('stats.employment.label') },
+  { value: t('stats.directions.value'), label: t('stats.directions.label') },
+  { value: t('stats.years.value'), label: t('stats.years.label') },
 ];
 
-export const testimonials = [
+export const getTestimonials = (t: TFunction) => [
   {
     name: 'Айдана Карымова',
     role: 'Frontend Developer @ TechHub',
-    text: 'За 6 месяцев прошла путь от нуля до первой работы. Преподаватели — практикующие специалисты.',
+    text: t('testimonials.list.aidana.text'),
     avatar: 'А',
   },
   {
     name: 'Жалгас Бейсенов',
     role: 'Backend Engineer @ Startup',
-    text: 'Лучшее вложение в себя. Реальные проекты в портфолио и отличное комьюнити.',
+    text: t('testimonials.list.jalgas.text'),
     avatar: 'Ж',
   },
   {
     name: 'Мадина Токтосунова',
     role: 'UI/UX Designer @ Agency',
-    text: 'Программа по дизайну дала мне все инструменты. Уже на 4-м месяце получила первый заказ.',
+    text: t('testimonials.list.madina.text'),
     avatar: 'М',
   },
 ];
 
-export const teachers = [
+export const getTeachers = (t: TFunction) => [
   {
     id: 1,
     name: 'Алена Нурбекова',
     role: 'Senior Frontend Mentor',
-    experience: '9 лет опыта',
+    experience: t('teachers.list.frontend.experience'),
     subjects: ['React', 'TypeScript', 'Next.js', 'Web Animation'],
-    bio: 'Помогает студентам создавать современные интерфейсы на React и TypeScript. Учит архитектуре, тестированию и production-подходам.',
+    bio: t('teachers.list.frontend.bio'),
     initials: 'АН',
   },
   {
     id: 2,
     name: 'Бектур Султанов',
     role: 'Backend Team Lead',
-    experience: '11 лет опыта',
+    experience: t('teachers.list.backend.experience'),
     subjects: ['Node.js', 'Python', 'PostgreSQL', 'REST API'],
-    bio: 'Наставник по серверным технологиям и архитектуре. Помогает студентам строить быстрые и надёжные API для реальных проектов.',
+    bio: t('teachers.list.backend.bio'),
     initials: 'БС',
   },
   {
     id: 3,
     name: 'Мария Жумабаева',
     role: 'UI/UX Coach',
-    experience: '8 лет опыта',
+    experience: t('teachers.list.uiux.experience'),
     subjects: ['Figma', 'UX Research', 'Prototyping', 'Design Systems'],
-    bio: 'Обучает пользовательскому опыту, прототипированию и визуальному дизайну, чтобы проекты выпускников выглядели профессионально.',
+    bio: t('teachers.list.uiux.bio'),
     initials: 'МЖ',
   },
 ];
