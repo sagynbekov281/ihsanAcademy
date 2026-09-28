@@ -3,7 +3,9 @@ import { Link, useLocation } from 'react-router-dom';
 import { RiArrowRightLine, RiCheckLine, RiTimeLine, RiUserLine, RiCloseLine, RiCodeLine, RiGroupLine, RiMedalLine, RiBookOpenLine } from 'react-icons/ri';
 import { useTranslation } from 'react-i18next';
 import AnimSection from '../components/AnimSection';
-import { getCourses, type Course } from '../data';
+import { type Course } from '../data';
+import { useCourses } from '../hooks/useCourses';
+
 
 // Extra info per course (by index fallback)
 const extras: Record<number, { langs: string[]; students: number; projects: number; about: string }> = {};
@@ -22,7 +24,7 @@ export default function CoursesPage() {
   const [selected, setSelected] = useState<number | null>(null);
   const location = useLocation();
 
-  const courses = getCourses(t);
+  const courses = useCourses();
 
   const levelOrder = ['beginner', 'intermediate', 'advanced'] as const;
   const levels = [
@@ -34,7 +36,11 @@ export default function CoursesPage() {
 
   const filtered = active === 'all' ? courses : courses.filter((c: Course) => c.levelKey === active);
   const selectedCourse = courses.find((c: Course) => c.id === selected);
-  const selectedExtra = selectedCourse ? (extras[selectedCourse.id] ?? defaultExtras[courses.indexOf(selectedCourse)] ?? defaultExtras[0]) : null;
+  const selectedExtra = selectedCourse
+    ? (selectedCourse.about !== undefined
+        ? { langs: selectedCourse.langs ?? [], students: selectedCourse.students ?? 0, projects: selectedCourse.projects ?? 0, about: selectedCourse.about }
+        : (extras[selectedCourse.id] ?? defaultExtras[courses.indexOf(selectedCourse)] ?? defaultExtras[0]))
+    : null;
 
   useEffect(() => {
     if (!location.hash) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
@@ -137,7 +143,11 @@ export default function CoursesPage() {
                     </div>
 
                     <div className="w-full sm:w-auto border-t border-[#181B30] sm:border-t-0 sm:border-l group-hover:border-[#2A2E52] flex flex-col items-start sm:items-end justify-center gap-2 px-5 sm:px-6 py-5 transition-colors duration-300">
-                      <p className="text-white font-semibold text-base group-hover:text-[#C0C4FF] transition-colors duration-300">{course.price}</p>
+                      <p className="text-white font-semibold text-base group-hover:text-[#C0C4FF] transition-colors duration-300">
+                        {course.oldPrice && <span className="text-[#7A82A8] text-xs line-through mr-2">{course.oldPrice}</span>}
+                        {course.price}
+                        {course.discountPercent ? <span className="ml-2 text-[10px] font-bold text-white bg-[#5B5BD6] rounded-full px-2 py-0.5">-{course.discountPercent}%</span> : null}
+                      </p>
                       <p className="text-[#7A82A8] text-xs flex items-center gap-1">
                         <RiTimeLine size={11} /> {course.duration}
                       </p>
@@ -256,11 +266,16 @@ export default function CoursesPage() {
 
                 <div className="border-t border-[#1E2448] pt-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <div>
-                    <p className="text-white font-bold text-lg">{selectedCourse.price}</p>
+                    <p className="text-white font-bold text-lg">
+                      {selectedCourse.oldPrice && <span className="text-[#7A82A8] text-sm line-through mr-2">{selectedCourse.oldPrice}</span>}
+                      {selectedCourse.price}
+                      {selectedCourse.discountPercent ? <span className="ml-2 text-xs font-bold text-white bg-[#5B5BD6] rounded-full px-2 py-0.5">-{selectedCourse.discountPercent}%</span> : null}
+                    </p>
                     <p className="text-[#7A82A8] text-xs mt-0.5">{t('courses.perCourse')}</p>
                   </div>
                   <Link
                     to="/contact"
+                    state={{ course: selectedCourse.title }}
                     onClick={() => setSelected(null)}
                     className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#5B5BD6] text-white text-sm font-medium hover:bg-[#4a4ac4] transition-all shadow-lg shadow-[#5B5BD6]/20"
                   >

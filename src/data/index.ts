@@ -18,6 +18,8 @@ export type Course = {
   level: string;
   levelKey: 'beginner' | 'intermediate' | 'advanced';
   price: string;
+  oldPrice?: string;
+  discountPercent?: number;
   icon: IconType;
   topics: string[];
 };

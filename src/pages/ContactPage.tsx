@@ -1,32 +1,142 @@
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { RiSendPlaneLine, RiTelegramLine, RiWhatsappLine, RiInstagramLine, RiMapPinLine, RiPhoneLine, RiMailLine, RiTimeLine, RiArrowDownSLine } from 'react-icons/ri';
 import { useTranslation } from 'react-i18next';
 import AnimSection from '../components/AnimSection';
+import { useCourses } from '../hooks/useCourses';
 import { faqs } from '../data';
+
+// URL backend. Добавь в .env фронтенда: VITE_API_URL=https://твой-backend.onrender.com
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+type Stage = 'form' | 'otp' | 'done';
 
 export default function ContactPage() {
   const { t } = useTranslation();
-  const [form, setForm] = useState({ name: '', phone: '', course: '', message: '' });
-  const [sent, setSent] = useState(false);
-  const [open, setOpen] = useState(false);
+  const location = useLocation();
 
-  const courses = [
-    t('contact.courses.frontend'),
-    t('contact.courses.backend'),
-    t('contact.courses.uiux'),
-    t('contact.courses.data'),
-    t('contact.courses.cyber'),
-    t('contact.courses.mobile'),
-  ];
+  // Курс, переданный со страницы /courses при клике на "Записаться" (state={{ course }})
+  const incomingCourse = (location.state as { course?: string } | null)?.course || '';
+
+  const [form, setForm] = useState({ name: '', phone: '', course: incomingCourse, message: '' });
+  const [open, setOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
+
+  const [stage, setStage] = useState<Stage>('form');
+  const [applicationId, setApplicationId] = useState<string | null>(null);
+  const [otpValue, setOtpValue] = useState('');
+  const [resendCooldown, setResendCooldown] = useState(0);
+
+  const courses = useCourses().map((c) => c.title);
 
   const handle = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm(p => ({ ...p, [e.target.name]: e.target.value }));
 
-  const submit = (e: React.FormEvent) => {
+  const startResendCooldown = () => {
+    setResendCooldown(60);
+    const interval = setInterval(() => {
+      setResendCooldown(c => {
+        if (c <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return c - 1;
+      });
+    }, 1000);
+  };
+
+  // Шаг 1: отправка формы
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSent(true);
-    setTimeout(() => setSent(false), 4000);
-    setForm({ name: '', phone: '', course: '', message: '' });
+    setError('');
+    setSubmitting(true);
+
+    try {
+      const res = await fetch(`${API_URL}/api/applications`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name,
+          phone: form.phone,
+          course: form.course,
+          message: form.message,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        setError(
+          Array.isArray(data.errors) ? data.errors.join(', ') : data.error || 'Не удалось отправить заявку. Проверьте данные и попробуйте снова.'
+        );
+        return;
+      }
+
+      if (data.needsVerification) {
+        // Включена проверка номера по SMS-коду
+        setApplicationId(data.application.id);
+        setOtpValue('');
+        setStage('otp');
+        startResendCooldown();
+      } else {
+        // Проверка по SMS выключена — заявка сразу принята
+        setStage('done');
+        setForm({ name: '', phone: '', course: '', message: '' });
+      }
+    } catch {
+      setError('Не удалось связаться с сервером. Проверьте интернет-соединение и попробуйте позже.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // Шаг 2 (только если включён REQUIRE_OTP): проверка кода из SMS
+  const submitOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!applicationId) return;
+    setError('');
+    setSubmitting(true);
+
+    try {
+      const res = await fetch(`${API_URL}/api/applications/${applicationId}/verify-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: otpValue }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        setError(data.error || 'Неверный код. Попробуйте снова.');
+        return;
+      }
+
+      setStage('done');
+      setForm({ name: '', phone: '', course: '', message: '' });
+    } catch {
+      setError('Не удалось связаться с сервером. Проверьте интернет-соединение и попробуйте позже.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const resendCode = async () => {
+    if (!applicationId || resendCooldown > 0) return;
+    setError('');
+    try {
+      const res = await fetch(`${API_URL}/api/applications/${applicationId}/resend-otp`, {
+        method: 'POST',
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        setError(data.error || 'Не удалось отправить код повторно.');
+        return;
+      }
+      startResendCooldown();
+    } catch {
+      setError('Не удалось связаться с сервером.');
+    }
   };
 
   const inputCls = "w-full bg-[#0B0D1A] border border-[#1E2448] rounded-xl px-4 py-3 text-white text-sm placeholder-[#7A82A8] focus:outline-none focus:border-[#5B5BD6] transition-colors";
@@ -47,72 +157,143 @@ export default function ContactPage() {
           {/* Form */}
           <AnimSection className="lg:col-span-3 flex flex-col">
             <div className="border border-[#1E2448] rounded-2xl p-6 sm:p-8 bg-[#111428]/80 flex flex-col flex-1">
-              <h2 className="font-display text-lg font-semibold text-white mb-6">{t('contact.formTitle')}</h2>
-              {sent && (
-                <div className="mb-5 p-3.5 rounded-xl bg-[#5B5BD6]/15 border border-[#5B5BD6]/30 text-[#7B7FE8] text-sm">
-                  {t('contact.successMsg')}
+
+              {stage === 'done' && (
+                <div className="flex flex-col items-center justify-center flex-1 text-center py-10">
+                  <div className="w-14 h-14 rounded-full bg-[#5B5BD6]/15 border border-[#5B5BD6]/30 flex items-center justify-center mb-4">
+                    <RiSendPlaneLine size={22} className="text-[#7B7FE8]" />
+                  </div>
+                  <h2 className="font-display text-lg font-semibold text-white mb-2">{t('contact.successMsg')}</h2>
+                  <p className="text-[#7A82A8] text-sm max-w-sm">
+                    Заявка принята. Наш менеджер свяжется с вами в ближайшее время.
+                  </p>
+                  <button
+                    onClick={() => setStage('form')}
+                    className="mt-6 text-sm text-[#9B9FE8] hover:text-white transition-colors"
+                  >
+                    Отправить ещё одну заявку
+                  </button>
                 </div>
               )}
-              <form onSubmit={submit} className="flex flex-col flex-1 gap-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-xs text-[#7A82A8] mb-1.5 block">{t('contact.labelName')} *</label>
-                    <input name="name" value={form.name} onChange={handle} required placeholder={t('contact.placeholderName')} className={inputCls} />
-                  </div>
-                  <div>
-                    <label className="text-xs text-[#7A82A8] mb-1.5 block">{t('contact.labelPhone')} *</label>
-                    <input name="phone" value={form.phone} onChange={handle} required placeholder={t('contact.placeholderPhone')} className={inputCls} />
-                  </div>
-                </div>
 
-                {/* Custom dropdown */}
-                <div className="relative">
-                  <label className="text-xs text-[#7A82A8] mb-1.5 block">{t('contact.labelCourse')}</label>
-                  <button
-                    type="button"
-                    onClick={() => setOpen(p => !p)}
-                    className="w-full bg-[#0B0D1A] border border-[#1E2448] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#5B5BD6] transition-colors flex items-center justify-between"
-                  >
-                    <span className={form.course ? 'text-white' : 'text-[#7A82A8]'}>
-                      {form.course || t('contact.placeholderCourse')}
-                    </span>
-                    <RiArrowDownSLine
-                      className={`text-[#7A82A8] transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
-                      size={18}
-                    />
-                  </button>
-
-                  {open && (
-                    <div className="absolute z-50 mt-2 w-full bg-[#0B0D1A] border border-[#1E2448] rounded-2xl overflow-hidden shadow-xl">
-                      {courses.map(course => (
-                        <div
-                          key={course}
-                          onClick={() => { setForm(p => ({ ...p, course })); setOpen(false); }}
-                          className={`px-5 py-3 text-sm cursor-pointer transition-colors hover:bg-[#5B5BD6]/20 hover:text-white
-                            ${form.course === course ? 'text-[#7B7FE8] bg-[#5B5BD6]/10' : 'text-[#7A82A8]'}`}
-                        >
-                          {course}
-                        </div>
-                      ))}
+              {stage === 'form' && (
+                <>
+                  <h2 className="font-display text-lg font-semibold text-white mb-6">{t('contact.formTitle')}</h2>
+                  {error && (
+                    <div className="mb-5 p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
+                      {error}
                     </div>
                   )}
-                </div>
+                  <form onSubmit={submit} className="flex flex-col flex-1 gap-5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-xs text-[#7A82A8] mb-1.5 block">{t('contact.labelName')} *</label>
+                        <input name="name" value={form.name} onChange={handle} required placeholder={t('contact.placeholderName')} className={inputCls} />
+                      </div>
+                      <div>
+                        <label className="text-xs text-[#7A82A8] mb-1.5 block">{t('contact.labelPhone')} *</label>
+                        <input name="phone" value={form.phone} onChange={handle} required placeholder={t('contact.placeholderPhone')} className={inputCls} />
+                      </div>
+                    </div>
 
+                    {/* Custom dropdown */}
+                    <div className="relative">
+                      <label className="text-xs text-[#7A82A8] mb-1.5 block">{t('contact.labelCourse')}</label>
+                      <button
+                        type="button"
+                        onClick={() => setOpen(p => !p)}
+                        className="w-full bg-[#0B0D1A] border border-[#1E2448] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#5B5BD6] transition-colors flex items-center justify-between"
+                      >
+                        <span className={form.course ? 'text-white' : 'text-[#7A82A8]'}>
+                          {form.course || t('contact.placeholderCourse')}
+                        </span>
+                        <RiArrowDownSLine
+                          className={`text-[#7A82A8] transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+                          size={18}
+                        />
+                      </button>
+
+                      {open && (
+                        <div className="absolute z-50 mt-2 w-full bg-[#0B0D1A] border border-[#1E2448] rounded-2xl overflow-hidden shadow-xl">
+                          {courses.map(course => (
+                            <div
+                              key={course}
+                              onClick={() => { setForm(p => ({ ...p, course })); setOpen(false); }}
+                              className={`px-5 py-3 text-sm cursor-pointer transition-colors hover:bg-[#5B5BD6]/20 hover:text-white
+                                ${form.course === course ? 'text-[#7B7FE8] bg-[#5B5BD6]/10' : 'text-[#7A82A8]'}`}
+                            >
+                              {course}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex flex-col flex-1">
+                      <label className="text-xs text-[#7A82A8] mb-1.5 block">{t('contact.labelMessage')}</label>
+                      <textarea
+                        name="message" value={form.message} onChange={handle}
+                        rows={7} placeholder={t('contact.placeholderMessage')}
+                        className={`${inputCls} resize-none flex-1`}
+                        style={{ minHeight: '160px' }}
+                      />
+                    </div>
+
+                    <button type="submit" disabled={submitting} className="btn-primary violet-glow w-full justify-center mt-auto disabled:opacity-60 disabled:cursor-not-allowed">
+                      <RiSendPlaneLine size={16} />
+                      {submitting ? 'Отправка...' : t('contact.submitBtn')}
+                    </button>
+                  </form>
+                </>
+              )}
+
+              {stage === 'otp' && (
                 <div className="flex flex-col flex-1">
-                  <label className="text-xs text-[#7A82A8] mb-1.5 block">{t('contact.labelMessage')}</label>
-                  <textarea
-                    name="message" value={form.message} onChange={handle}
-                    rows={7} placeholder={t('contact.placeholderMessage')}
-                    className={`${inputCls} resize-none flex-1`}
-                    style={{ minHeight: '160px' }}
-                  />
-                </div>
+                  <h2 className="font-display text-lg font-semibold text-white mb-2">Подтвердите номер</h2>
+                  <p className="text-[#7A82A8] text-sm mb-6">
+                    Мы отправили SMS с кодом на номер <span className="text-white">{form.phone}</span>. Введите его ниже.
+                  </p>
 
-                <button type="submit" className="btn-primary violet-glow w-full justify-center mt-auto">
-                  <RiSendPlaneLine size={16} />
-                  {t('contact.submitBtn')}
-                </button>
-              </form>
+                  {error && (
+                    <div className="mb-5 p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
+                      {error}
+                    </div>
+                  )}
+
+                  <form onSubmit={submitOtp} className="flex flex-col gap-5">
+                    <input
+                      value={otpValue}
+                      onChange={e => setOtpValue(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                      inputMode="numeric"
+                      placeholder="000000"
+                      maxLength={6}
+                      required
+                      className={`${inputCls} text-center text-2xl tracking-[0.5em] font-semibold`}
+                    />
+
+                    <button type="submit" disabled={submitting || otpValue.length < 4} className="btn-primary violet-glow w-full justify-center disabled:opacity-60 disabled:cursor-not-allowed">
+                      {submitting ? 'Проверка...' : 'Подтвердить'}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={resendCode}
+                      disabled={resendCooldown > 0}
+                      className="text-sm text-[#9B9FE8] hover:text-white transition-colors disabled:text-[#7A82A8] disabled:cursor-not-allowed"
+                    >
+                      {resendCooldown > 0 ? `Отправить код ещё раз через ${resendCooldown} сек` : 'Отправить код ещё раз'}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => { setStage('form'); setError(''); setOtpValue(''); }}
+                      className="text-xs text-[#7A82A8] hover:text-white transition-colors"
+                    >
+                      ← Изменить данные заявки
+                    </button>
+                  </form>
+                </div>
+              )}
             </div>
           </AnimSection>
 
