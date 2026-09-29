@@ -139,7 +139,7 @@ export default function ContactPage() {
     }
   };
 
-  const inputCls = "w-full bg-[#0B0D1A] border border-[#1E2448] rounded-xl px-4 py-3 text-white text-sm placeholder-[#7A82A8] focus:outline-none focus:border-[#5B5BD6] transition-colors";
+  const inputCls = "w-full bg-[#0B0D1A] border border-[#1E2448] rounded-xl px-4 py-3 text-white text-base sm:text-sm placeholder-[#7A82A8] focus:outline-none focus:border-[#5B5BD6] transition-colors";
 
   return (
     <main className="min-h-screen pt-24">

@@ -29,7 +29,7 @@ function readCache(): ApiCourse[] | null {
   try {
     const raw = localStorage.getItem(CACHE_KEY);
     const parsed = raw ? JSON.parse(raw) : null;
-    return Array.isArray(parsed) && parsed.length ? parsed : null;
+    return Array.isArray(parsed) ? parsed : null;
   } catch {
     return null;
   }
@@ -46,7 +46,7 @@ export function useCourses(): CourseView[] {
       .then((d) => {
         if (cancelled || !d.success || !Array.isArray(d.courses)) return;
         try { localStorage.setItem(CACHE_KEY, JSON.stringify(d.courses)); } catch { /* ignore */ }
-        setRemote(d.courses.length ? d.courses : null);
+        setRemote(d.courses);
       })
       .catch(() => {});
     return () => { cancelled = true; };
