@@ -184,7 +184,12 @@ export default function HomePage() {
           </AnimSection>
 
           <div className="flex flex-col gap-5">
-            {courses.map((course, i) => (
+            {courses.map((course, i) => {
+              const discountDate = course.discountEndsAt
+                ? course.discountEndsAt.split('-').reverse().join('.')
+                : t('courses.noDiscountDeadline');
+
+              return (
               <AnimSection key={course.id} delay={i * 60}>
                 <div
                   role="button"
@@ -196,8 +201,14 @@ export default function HomePage() {
                       navigate('/courses');
                     }
                   }}
-                  className="group flex items-center gap-6 rounded-2xl border border-[#1E1B3A] bg-[#0D0B1E] px-6 py-5 hover:border-[#7C3AED]/50 hover:bg-[#110D2A] transition-all duration-300 cursor-pointer"
+                  className={`group relative flex items-center gap-6 rounded-2xl border border-[#1E1B3A] bg-[#0D0B1E] px-6 py-5 hover:border-[#7C3AED]/50 hover:bg-[#110D2A] transition-all duration-300 cursor-pointer overflow-hidden ${course.discountPercent ? 'pt-12 sm:pt-5' : ''}`}
                 >
+                  {course.discountPercent && (
+                    <div className="absolute top-0 right-0 z-10 flex items-center gap-1.5 rounded-bl-xl bg-gradient-to-r from-[#7C3AED] to-[#5B5BD6] px-3 py-1.5 text-white shadow-md sm:hidden">
+                      <span className="text-xs font-black">-{course.discountPercent}%</span>
+                      <span className="text-[9px] font-semibold">{course.discountEndsAt ? `${t('courses.discountUntil')} ${discountDate}` : discountDate}</span>
+                    </div>
+                  )}
                   <span className="text-4xl font-black text-[#1E1B3A] group-hover:text-[#6D28D9]/40 transition-colors duration-300 w-12 shrink-0 font-mono select-none">
                     {String(i + 1).padStart(2, '0')}
                   </span>
@@ -222,13 +233,29 @@ export default function HomePage() {
                     </div>
                     <div className="text-right">
                       <p className="text-[10px] text-[#334155] uppercase tracking-wider">{t('home.price')}</p>
-                      <p className="text-sm font-bold text-white">{course.price}</p>
+                      {course.discountPercent && (
+                        <div className="mb-1 hidden items-center justify-end gap-1.5 rounded-full bg-gradient-to-r from-[#7C3AED] to-[#5B5BD6] px-2.5 py-1 text-white shadow-md shadow-[#5B5BD6]/20 sm:flex">
+                          <span className="text-[10px] font-black">-{course.discountPercent}%</span>
+                          <span className="text-[9px]">{course.discountEndsAt ? `${t('courses.discountUntil')} ${discountDate}` : discountDate}</span>
+                        </div>
+                      )}
+                      {course.oldPrice && <p className="text-[10px] text-[#7A82A8] line-through">{course.oldPrice}</p>}
+                      {course.discountPercent && <p className="text-[9px] font-semibold text-[#B7ADFF]">{t('courses.discountPrice')}</p>}
+                      <p className={`font-black text-white ${course.discountPercent ? 'text-base' : 'text-sm'}`}>{course.price}</p>
                     </div>
                   </div>
+                  {course.discountPercent && (
+                    <div className="mt-3 flex items-baseline gap-2 sm:hidden">
+                      {course.oldPrice && <span className="text-xs text-[#7A82A8] line-through">{course.oldPrice}</span>}
+                      <span className="text-[10px] font-semibold text-[#B7ADFF]">{t('courses.discountPrice')}</span>
+                      <span className="text-base font-black text-white">{course.price}</span>
+                    </div>
+                  )}
                   <RiArrowRightLine size={18} className="text-[#334155] group-hover:text-[#A855F7] group-hover:translate-x-1 transition-all duration-200 shrink-0" />
                 </div>
               </AnimSection>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

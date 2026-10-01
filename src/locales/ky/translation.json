@@ -156,6 +156,10 @@
     "perCourse": "бүт курс үчүн",
     "enroll": "Жазылуу",
     "details": "Толугураак",
+    "discountUntil": "чейин",
+    "noDiscountDeadline": "мөөнөтсүз",
+    "priceBeforeDiscount": "Мурунку баа",
+    "discountPrice": "Арзандатылган баа",
     "levels": {
       "beginner": "Башталгыч",
       "intermediate": "Орто",

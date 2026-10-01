@@ -6,6 +6,7 @@ import { getCourses, type Course } from '../data';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 const CACHE_KEY = 'ihsan_courses_cache';
+const REFRESH_INTERVAL_MS = 5_000;
 
 const icons: Record<string, IconType> = {
   code: RiCodeLine, react: RiReactjsLine, database: RiDatabaseLine, brush: RiBrushLine,
@@ -19,10 +20,11 @@ type ApiCourse = {
   id: string; title: string; description: string; about: string; duration: string;
   level: string; levelKey: Course['levelKey']; iconKey: string; topics: string[]; langs: string[];
   students: number; projects: number; price: number; finalPrice: number; discountPercent: number;
+  discountEndsAt: string | null;
 };
 
 export type CourseView = Course & {
-  oldPrice?: string; discountPercent?: number; about?: string;
+  oldPrice?: string; discountPercent?: number; discountEndsAt?: string | null; about?: string;
   langs?: string[]; students?: number; projects?: number;
 };
 
@@ -44,15 +46,38 @@ export function useCourses(): CourseView[] {
 
   useEffect(() => {
     let cancelled = false;
-    fetch(`${API_URL}/api/courses`)
-      .then((r) => r.json())
-      .then((d) => {
-        if (cancelled || !d.success || !Array.isArray(d.courses)) return;
-        try { localStorage.setItem(CACHE_KEY, JSON.stringify(d.courses)); } catch { /* ignore */ }
-        setRemote(d.courses);
-      })
-      .catch(() => {});
-    return () => { cancelled = true; };
+    let refreshing = false;
+
+    const refresh = async () => {
+      if (cancelled || refreshing) return;
+      refreshing = true;
+      try {
+        const response = await fetch(`${API_URL}/api/courses`, { cache: 'no-store' });
+        const data = await response.json();
+        if (cancelled || !response.ok || !data.success || !Array.isArray(data.courses)) return;
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify(data.courses)); } catch { /* ignore */ }
+        setRemote((current) => JSON.stringify(current) === JSON.stringify(data.courses) ? current : data.courses);
+      } catch {
+        // Keep the latest cached or in-memory catalog when the API is temporarily unavailable.
+      } finally {
+        refreshing = false;
+      }
+    };
+
+    const refreshWhenVisible = () => {
+      if (document.visibilityState === 'visible') void refresh();
+    };
+
+    void refresh();
+    const interval = window.setInterval(refresh, REFRESH_INTERVAL_MS);
+    window.addEventListener('focus', refreshWhenVisible);
+    document.addEventListener('visibilitychange', refreshWhenVisible);
+    return () => {
+      cancelled = true;
+      window.clearInterval(interval);
+      window.removeEventListener('focus', refreshWhenVisible);
+      document.removeEventListener('visibilitychange', refreshWhenVisible);
+    };
   }, []);
 
   if (!remote) return getCourses(t);
@@ -69,6 +94,7 @@ export function useCourses(): CourseView[] {
     price: money(c.finalPrice),
     oldPrice: c.discountPercent > 0 ? money(c.price) : undefined,
     discountPercent: c.discountPercent || undefined,
+    discountEndsAt: c.discountPercent > 0 ? c.discountEndsAt : null,
     icon: icons[c.iconKey] ?? RiCodeLine,
     topics: localizedCourseTopics(t, c.iconKey, c.topics),
     about: localizedCourseValue(t, c.iconKey, 'about', c.about || c.description),

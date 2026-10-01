@@ -4,7 +4,7 @@ import { RiArrowRightLine, RiCheckLine, RiTimeLine, RiUserLine, RiCloseLine, RiC
 import { useTranslation } from 'react-i18next';
 import AnimSection from '../components/AnimSection';
 import { type Course } from '../data';
-import { useCourses } from '../hooks/useCourses';
+import { useCourses, type CourseView } from '../hooks/useCourses';
 
 
 // Extra info per course when a catalog record does not include it.
@@ -91,10 +91,13 @@ export default function CoursesPage() {
 
         {/* Course rows */}
         <div className="space-y-5">
-          {filtered.map((course: Course, i: number) => {
+          {filtered.map((course: CourseView, i: number) => {
             const Icon = course.icon;
             const num = String(i + 1).padStart(2, '0');
             const isSelected = selected === course.id;
+            const discountDate = course.discountEndsAt
+              ? course.discountEndsAt.split('-').reverse().join('.')
+              : t('courses.noDiscountDeadline');
 
             return (
               <AnimSection key={course.id} delay={i * 40}>
@@ -106,6 +109,12 @@ export default function CoursesPage() {
                     hover:border-[#5B5BD6]/50 hover:bg-[#0F1128] hover:shadow-[0_0_30px_-8px_rgba(91,91,214,0.25)]`}
                 >
                   <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#5B5BD6]/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  {course.discountPercent && (
+                    <div className="absolute top-0 right-0 z-10 flex min-w-[116px] flex-col items-center rounded-bl-2xl rounded-tr-2xl bg-gradient-to-br from-[#7C3AED] to-[#5B5BD6] px-3 py-2 text-white shadow-lg shadow-[#5B5BD6]/25 sm:hidden">
+                      <span className="text-sm font-black leading-tight">-{course.discountPercent}%</span>
+                      <span className="text-[9px] font-semibold leading-tight">{course.discountEndsAt ? `${t('courses.discountUntil')} ${discountDate}` : discountDate}</span>
+                    </div>
+                  )}
 
                   <div className="flex flex-col sm:flex-row items-stretch">
                     <div className="w-full sm:w-24 border-b border-[#181B30] sm:border-b-0 sm:border-r group-hover:border-[#2A2E52] flex items-center justify-center p-4 sm:p-0 shrink-0 transition-colors duration-300">
@@ -146,11 +155,25 @@ export default function CoursesPage() {
                     </div>
 
                     <div className="w-full sm:w-auto border-t border-[#181B30] sm:border-t-0 sm:border-l group-hover:border-[#2A2E52] flex flex-col items-start sm:items-end justify-center gap-2 px-5 sm:px-6 py-5 transition-colors duration-300">
-                      <p className="text-white font-semibold text-base group-hover:text-[#C0C4FF] transition-colors duration-300">
-                        {course.oldPrice && <span className="text-[#7A82A8] text-xs line-through mr-2">{course.oldPrice}</span>}
-                        {course.price}
-                        {course.discountPercent ? <span className="ml-2 text-[10px] font-bold text-white bg-[#5B5BD6] rounded-full px-2 py-0.5">-{course.discountPercent}%</span> : null}
-                      </p>
+                      {course.discountPercent && (
+                        <div className="hidden sm:flex items-center gap-2 rounded-full bg-gradient-to-br from-[#7C3AED] to-[#5B5BD6] px-3 py-1.5 text-white shadow-md shadow-[#5B5BD6]/20">
+                          <span className="text-xs font-black">-{course.discountPercent}%</span>
+                          <span className="text-[10px] font-medium">{course.discountEndsAt ? `${t('courses.discountUntil')} ${discountDate}` : discountDate}</span>
+                        </div>
+                      )}
+                      <div className="flex flex-col items-start sm:items-end leading-tight">
+                        {course.oldPrice && (
+                          <span className="text-xs text-[#7A82A8] line-through">
+                            {t('courses.priceBeforeDiscount')}: {course.oldPrice}
+                          </span>
+                        )}
+                        {course.discountPercent && (
+                          <span className="mt-1 text-[10px] font-semibold uppercase text-[#B7ADFF]">{t('courses.discountPrice')}</span>
+                        )}
+                        <span className={`mt-0.5 font-black ${course.discountPercent ? 'text-2xl text-white' : 'text-base text-white'}`}>
+                          {course.price}
+                        </span>
+                      </div>
                       <p className="text-[#7A82A8] text-xs flex items-center gap-1">
                         <RiTimeLine size={11} /> {course.duration}
                       </p>

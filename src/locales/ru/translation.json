@@ -156,6 +156,10 @@
     "perCourse": "за весь курс",
     "enroll": "Записаться",
     "details": "Подробнее",
+    "discountUntil": "до",
+    "noDiscountDeadline": "без срока",
+    "priceBeforeDiscount": "Было",
+    "discountPrice": "Цена со скидкой",
     "levels": {
       "beginner": "Начальный",
       "intermediate": "Средний",

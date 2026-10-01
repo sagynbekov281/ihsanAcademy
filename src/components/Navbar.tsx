@@ -75,7 +75,7 @@ export default function Navbar() {
             <RiCodeSSlashLine className="text-[#A855F7]" size={15} />
           </div>
           <span className="font-display font-bold text-white text-[17px] tracking-tight">
-            Ihsan<span style={{ background: 'linear-gradient(135deg, #A855F7, #C084FC)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Academy</span>
+              Ihsan<span style={{ background: 'linear-gradient(135deg, #A855F7, #C084FC)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Academy</span>
           </span>
         </Link>
 
@@ -150,7 +150,7 @@ export default function Navbar() {
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold text-white transition-all duration-200 hover:brightness-110 hover:scale-[1.03] active:scale-[0.97]"
             style={{ background: 'linear-gradient(135deg, #7C3AED, #A855F7)' }}
           >
-            {t('cta.enroll')}
+              {t('cta.enroll')}
           </Link>
         </div>
 
