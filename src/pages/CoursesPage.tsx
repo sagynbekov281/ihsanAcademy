@@ -7,15 +7,14 @@ import { type Course } from '../data';
 import { useCourses } from '../hooks/useCourses';
 
 
-// Extra info per course (by index fallback)
-const extras: Record<number, { langs: string[]; students: number; projects: number; about: string }> = {};
+// Extra info per course when a catalog record does not include it.
 const defaultExtras = [
-  { langs: ['HTML', 'CSS', 'JavaScript', 'TypeScript', 'React'], students: 120, projects: 5, about: 'Курс охватывает всё — от вёрстки до деплоя. Ты научишься создавать современные сайты и веб-приложения с нуля и выйдешь на рынок с портфолио.' },
-  { langs: ['Python', 'Node.js', 'SQL', 'Docker', 'REST API'], students: 95, projects: 4, about: 'Глубокое погружение в серверную разработку: базы данных, API, деплой. После курса ты сможешь строить масштабируемые backend-системы.' },
-  { langs: ['Figma', 'Adobe XD', 'Principle', 'Protopie'], students: 80, projects: 6, about: 'Научишься думать как дизайнер и создавать интерфейсы, которые работают. Практика на реальных проектах с фидбеком от ментора.' },
-  { langs: ['Python', 'Pandas', 'NumPy', 'Sklearn', 'Jupyter'], students: 60, projects: 3, about: 'Машинное обучение, анализ данных, визуализация. Ты научишься находить смысл в больших массивах данных и строить модели.' },
-  { langs: ['Linux', 'Kali', 'Wireshark', 'Metasploit', 'Python'], students: 45, projects: 3, about: 'Этичный хакинг, пентестинг, защита сетей. Курс для тех, кто хочет работать в сфере информационной безопасности.' },
-  { langs: ['Swift', 'Kotlin', 'Flutter', 'Dart', 'Firebase'], students: 70, projects: 4, about: 'Разработка мобильных приложений под iOS и Android. Создашь несколько приложений и опубликуешь их в сторе.' },
+  { langs: ['HTML', 'CSS', 'JavaScript', 'TypeScript', 'React'], students: 120, projects: 5 },
+  { langs: ['Python', 'Node.js', 'SQL', 'Docker', 'REST API'], students: 95, projects: 4 },
+  { langs: ['Figma', 'Adobe XD', 'Principle', 'Protopie'], students: 80, projects: 6 },
+  { langs: ['Python', 'Pandas', 'NumPy', 'Sklearn', 'Jupyter'], students: 60, projects: 3 },
+  { langs: ['Linux', 'Kali', 'Wireshark', 'Metasploit', 'Python'], students: 45, projects: 3 },
+  { langs: ['Swift', 'Kotlin', 'Flutter', 'Dart', 'Firebase'], students: 70, projects: 4 },
 ];
 
 export default function CoursesPage() {
@@ -37,9 +36,13 @@ export default function CoursesPage() {
   const filtered = active === 'all' ? courses : courses.filter((c: Course) => c.levelKey === active);
   const selectedCourse = courses.find((c: Course) => c.id === selected);
   const selectedExtra = selectedCourse
-    ? (selectedCourse.about !== undefined
-        ? { langs: selectedCourse.langs ?? [], students: selectedCourse.students ?? 0, projects: selectedCourse.projects ?? 0, about: selectedCourse.about }
-        : (extras[selectedCourse.id] ?? defaultExtras[courses.indexOf(selectedCourse)] ?? defaultExtras[0]))
+    ? {
+        ...defaultExtras[courses.indexOf(selectedCourse)] ?? defaultExtras[0],
+        langs: selectedCourse.langs ?? defaultExtras[courses.indexOf(selectedCourse)]?.langs ?? [],
+        students: selectedCourse.students ?? defaultExtras[courses.indexOf(selectedCourse)]?.students ?? 0,
+        projects: selectedCourse.projects ?? defaultExtras[courses.indexOf(selectedCourse)]?.projects ?? 0,
+        about: selectedCourse.about ?? '',
+      }
     : null;
 
   useEffect(() => {

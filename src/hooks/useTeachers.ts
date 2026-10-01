@@ -49,10 +49,36 @@ export function useTeachers(): TeacherView[] {
   return remote.map((tItem, i) => ({
     id: i + 1,
     name: tItem.name,
-    role: tItem.role,
-    experience: tItem.experience,
+    role: localizedTeacherValue(t, tItem.name, 'role', tItem.role),
+    experience: localizedTeacherValue(t, tItem.name, 'experience', tItem.experience),
     subjects: tItem.subjects,
-    bio: tItem.bio,
+    bio: localizedTeacherValue(t, tItem.name, 'bio', tItem.bio),
     initials: tItem.initials,
   }));
+
+  function localizedTeacherValue(
+    translate: typeof t,
+    name: string,
+    field: 'role' | 'experience' | 'bio',
+    source: string,
+  ) {
+    const keys: Record<string, string> = {
+      'Алена Нурбекова': 'frontend',
+      'Бектур Султанов': 'backend',
+      'Мария Жумабаева': 'uiux',
+    };
+    const teacherKey = keys[name];
+    if (!teacherKey) return source;
+
+    const translationKey = `teachers.list.${teacherKey}.${field}`;
+    const russianValue = translate(translationKey, { lng: 'ru' });
+    const sourceRole = {
+      frontend: 'Senior Frontend Mentor',
+      backend: 'Backend Team Lead',
+      uiux: 'UI/UX Coach',
+    }[teacherKey];
+
+    if (field === 'role' && source === sourceRole) return translate(translationKey);
+    return source === russianValue ? translate(translationKey) : source;
+  }
 }

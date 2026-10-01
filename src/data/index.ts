@@ -22,6 +22,7 @@ export type Course = {
   discountPercent?: number;
   icon: IconType;
   topics: string[];
+  about?: string;
 };
 
 export const getCourses = (t: TFunction): Course[] => [
@@ -33,6 +34,7 @@ export const getCourses = (t: TFunction): Course[] => [
     level: t('courses.list.frontend.level'),
     levelKey: 'beginner',
     price: t('courses.list.frontend.price'),
+    about: t('courses.list.frontend.about'),
     icon: RiReactjsLine,
     topics: getTopics(t, 'courses.list.frontend.topics'),
   },
@@ -44,6 +46,7 @@ export const getCourses = (t: TFunction): Course[] => [
     level: t('courses.list.backend.level'),
     levelKey: 'intermediate',
     price: t('courses.list.backend.price'),
+    about: t('courses.list.backend.about'),
     icon: RiDatabaseLine,
     topics: getTopics(t, 'courses.list.backend.topics'),
   },
@@ -55,6 +58,7 @@ export const getCourses = (t: TFunction): Course[] => [
     level: t('courses.list.uiux.level'),
     levelKey: 'beginner',
     price: t('courses.list.uiux.price'),
+    about: t('courses.list.uiux.about'),
     icon: RiBrushLine,
     topics: getTopics(t, 'courses.list.uiux.topics'),
   },
@@ -66,6 +70,7 @@ export const getCourses = (t: TFunction): Course[] => [
     level: t('courses.list.data.level'),
     levelKey: 'advanced',
     price: t('courses.list.data.price'),
+    about: t('courses.list.data.about'),
     icon: RiBarChartLine,
     topics: getTopics(t, 'courses.list.data.topics'),
   },
@@ -77,6 +82,7 @@ export const getCourses = (t: TFunction): Course[] => [
     level: t('courses.list.cyber.level'),
     levelKey: 'intermediate',
     price: t('courses.list.cyber.price'),
+    about: t('courses.list.cyber.about'),
     icon: RiShieldCheckLine,
     topics: getTopics(t, 'courses.list.cyber.topics'),
   },
@@ -88,6 +94,7 @@ export const getCourses = (t: TFunction): Course[] => [
     level: t('courses.list.mobile.level'),
     levelKey: 'intermediate',
     price: t('courses.list.mobile.price'),
+    about: t('courses.list.mobile.about'),
     icon: RiSmartphoneLine,
     topics: getTopics(t, 'courses.list.mobile.topics'),
   },
@@ -125,7 +132,7 @@ export const getTeachers = (t: TFunction) => [
   {
     id: 1,
     name: 'Алена Нурбекова',
-    role: 'Senior Frontend Mentor',
+    role: t('teachers.list.frontend.role'),
     experience: t('teachers.list.frontend.experience'),
     subjects: ['React', 'TypeScript', 'Next.js', 'Web Animation'],
     bio: t('teachers.list.frontend.bio'),
@@ -134,7 +141,7 @@ export const getTeachers = (t: TFunction) => [
   {
     id: 2,
     name: 'Бектур Султанов',
-    role: 'Backend Team Lead',
+    role: t('teachers.list.backend.role'),
     experience: t('teachers.list.backend.experience'),
     subjects: ['Node.js', 'Python', 'PostgreSQL', 'REST API'],
     bio: t('teachers.list.backend.bio'),
@@ -143,7 +150,7 @@ export const getTeachers = (t: TFunction) => [
   {
     id: 3,
     name: 'Мария Жумабаева',
-    role: 'UI/UX Coach',
+    role: t('teachers.list.uiux.role'),
     experience: t('teachers.list.uiux.experience'),
     subjects: ['Figma', 'UX Research', 'Prototyping', 'Design Systems'],
     bio: t('teachers.list.uiux.bio'),
@@ -151,9 +158,7 @@ export const getTeachers = (t: TFunction) => [
   },
 ];
 
-export const faqs = [
-  { q: 'Нужен ли опыт?', a: 'Нет, большинство курсов для полных новичков.' },
-  { q: 'Как проходит обучение?', a: 'Очно 3 раза в неделю, также доступен онлайн.' },
-  { q: 'Есть ли рассрочка?', a: 'Да, рассрочка до 6 месяцев без переплат.' },
-  { q: 'Помогаете с работой?', a: 'Да! Карьерный отдел и партнёрские компании.' },
-];
+export const getFaqs = (t: TFunction) => {
+  const result = t('contact.faqs', { returnObjects: true }) as unknown;
+  return Array.isArray(result) ? (result as { q: string; a: string }[]) : [];
+};

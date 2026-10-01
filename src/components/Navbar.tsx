@@ -158,7 +158,7 @@ export default function Navbar() {
         <button
           onClick={() => setOpen(!open)}
           className="md:hidden text-[#94A3B8] hover:text-white p-1.5 rounded-lg hover:bg-white/5 transition-all duration-200"
-          aria-label="Меню"
+          aria-label={t('nav.menu')}
         >
           {open ? <RiCloseLine size={22} /> : <RiMenuLine size={22} />}
         </button>
@@ -194,7 +194,7 @@ export default function Navbar() {
           
           {/* Mobile Language Selection */}
           <div className="mt-3 pt-3 border-t border-[#7C3AED]/20 flex flex-col gap-2">
-            <p className="text-xs text-[#94A3B8] uppercase font-semibold px-3">Язык</p>
+            <p className="text-xs text-[#94A3B8] uppercase font-semibold px-3">{t('nav.language')}</p>
             {languages.map((lang) => (
               <button
                 key={lang.code}

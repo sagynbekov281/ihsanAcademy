@@ -5,10 +5,10 @@ import { RiArrowRightLine, RiUser3Line } from 'react-icons/ri';
 import { useTranslation } from 'react-i18next';
 
 const team = [
-  { name: 'Ихсан Усупов',       role: 'Основатель & CEO',      exp: '8 лет в разработке'     },
-  { name: 'Айбек Джакыпов',     role: 'Ведущий преподаватель', exp: 'Senior Frontend Dev'    },
-  { name: 'Нурлан Сатывалдиев', role: 'Backend ментор',        exp: '6 лет Node.js / Python' },
-  { name: 'Зарина Асанова',     role: 'UX/UI ментор',          exp: 'Product Designer @ Agency' },
+  { name: 'Ихсан Усупов', role: 'about.team.founder.role', exp: 'about.team.founder.experience' },
+  { name: 'Айбек Джакыпов', role: 'about.team.leadTeacher.role', exp: 'about.team.leadTeacher.experience' },
+  { name: 'Нурлан Сатывалдиев', role: 'about.team.backendMentor.role', exp: 'about.team.backendMentor.experience' },
+  { name: 'Зарина Асанова', role: 'about.team.designMentor.role', exp: 'about.team.designMentor.experience' },
 ];
 
 export default function AboutPage() {
@@ -71,8 +71,8 @@ export default function AboutPage() {
                   <RiUser3Line size={24} />
                 </div>
                 <p className="text-white font-semibold text-sm mb-0.5">{m.name}</p>
-                <p className="text-[#7B7FE8] text-xs mb-1">{m.role}</p>
-                <p className="text-[#7A82A8] text-xs">{m.exp}</p>
+                <p className="text-[#7B7FE8] text-xs mb-1">{t(m.role)}</p>
+                <p className="text-[#7A82A8] text-xs">{t(m.exp)}</p>
               </div>
             </AnimSection>
           ))}

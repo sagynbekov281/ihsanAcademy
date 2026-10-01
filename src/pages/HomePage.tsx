@@ -113,11 +113,11 @@ export default function HomePage() {
                 {/* fake code */}
                 <div className="font-mono text-[12px] space-y-1 leading-relaxed">
                   <p><span className="text-[#7C3AED]">import</span> <span className="text-[#A78BFA]">React</span> <span className="text-[#7C3AED]">from</span> <span className="text-[#34D399]">'react'</span></p>
-                  <p className="text-[#334155]">{'// Твой первый компонент'}</p>
+                  <p className="text-[#334155]">{t('home.preview.comment')}</p>
                   <p className="mt-2"><span className="text-[#7C3AED]">export default function</span> <span className="text-[#C084FC]">App</span><span className="text-[#64748B]">{'() {'}</span></p>
                   <p className="pl-4"><span className="text-[#7C3AED]">return</span> <span className="text-[#64748B]">(</span></p>
                   <p className="pl-8"><span className="text-[#64748B]">{'<'}</span><span className="text-[#A855F7]">div</span> <span className="text-[#34D399]">className</span><span className="text-[#64748B]">{'="app">'}</span></p>
-                  <p className="pl-12 text-[#94A3B8]">Привет, мир!</p>
+                  <p className="pl-12 text-[#94A3B8]">{t('home.preview.hello')}</p>
                   <p className="pl-8"><span className="text-[#64748B]">{'</'}</span><span className="text-[#A855F7]">div</span><span className="text-[#64748B]">{'>'}</span></p>
                   <p className="pl-4 text-[#64748B]">)</p>
                   <p className="text-[#64748B]">{'}'}</p>
@@ -125,7 +125,7 @@ export default function HomePage() {
                 {/* progress */}
                 <div className="mt-5 pt-4 border-t border-[#1E1B3A]">
                   <div className="flex justify-between text-[11px] text-[#475569] mb-2">
-                    <span>Прогресс модуля</span>
+                    <span>{t('home.preview.moduleProgress')}</span>
                     <span className="text-[#A855F7] font-semibold">68%</span>
                   </div>
                   <div className="h-1.5 rounded-full bg-[#1E1B3A] overflow-hidden">
@@ -136,8 +136,8 @@ export default function HomePage() {
 
               {/* floating badge top-right */}
               <div className="absolute -top-4 -right-6 bg-[#0E0B1F] border border-[#2D1B69] rounded-2xl px-4 py-2.5">
-                <p className="text-[11px] text-[#475569]">Зарплата после курса</p>
-                <p className="text-base font-black text-white">от $800 <span className="text-[#A855F7]">/мес</span></p>
+                <p className="text-[11px] text-[#475569]">{t('home.preview.salaryAfterCourse')}</p>
+                <p className="text-base font-black text-white">{t('home.preview.salaryFrom')} $800 <span className="text-[#A855F7]">{t('home.preview.perMonth')}</span></p>
               </div>
 
               {/* floating badge bottom-left */}
@@ -149,8 +149,8 @@ export default function HomePage() {
                   ))}
                 </div>
                 <div>
-                  <p className="text-white text-[11px] font-semibold">+47 студентов</p>
-                  <p className="text-[#475569] text-[10px]">в этом месяце</p>
+                  <p className="text-white text-[11px] font-semibold">{t('home.preview.studentsCount')}</p>
+                  <p className="text-[#475569] text-[10px]">{t('home.preview.thisMonth')}</p>
                 </div>
               </div>
             </div>
@@ -364,7 +364,7 @@ export default function HomePage() {
           <AnimSection>
             <div className="relative rounded-3xl overflow-hidden bg-[#0B0C12] border border-[#1F2130]">
               <div className="absolute inset-0 opacity-[0.04] font-mono text-[11px] text-white leading-5 p-8 overflow-hidden select-none pointer-events-none break-all">
-                {'const student = { name: "ТЫ", path: "IT" }; function startCareer(s) { const skills = learn(s); const job = getOffer(skills); return { success: true, salary: "$800+" }; } startCareer(student); // 🚀 '.repeat(20)}
+                {`const student = { name: "${t('home.preview.studentYou')}", path: "IT" }; function startCareer(s) { const skills = learn(s); const job = getOffer(skills); return { success: true, salary: "$800+" }; } startCareer(student); // 🚀 `.repeat(20)}
               </div>
               <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-[#A855F7]/10 blur-[80px] pointer-events-none" />
               <div className="absolute bottom-0 left-0 w-60 h-60 rounded-full bg-[#6D28D9]/10 blur-[60px] pointer-events-none" />

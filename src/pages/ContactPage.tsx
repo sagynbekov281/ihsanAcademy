@@ -4,15 +4,15 @@ import { RiSendPlaneLine, RiTelegramLine, RiWhatsappLine, RiInstagramLine, RiMap
 import { useTranslation } from 'react-i18next';
 import AnimSection from '../components/AnimSection';
 import { useCourses } from '../hooks/useCourses';
-import { faqs } from '../data';
+import { getFaqs } from '../data';
 
 // URL backend. Добавь в .env фронтенда: VITE_API_URL=https://твой-backend.onrender.com
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
-type Stage = 'form' | 'otp' | 'done';
+type Stage = 'form' | 'done';
 
 export default function ContactPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const location = useLocation();
 
   // Курс, переданный со страницы /courses при клике на "Записаться" (state={{ course }})
@@ -24,29 +24,12 @@ export default function ContactPage() {
   const [error, setError] = useState('');
 
   const [stage, setStage] = useState<Stage>('form');
-  const [applicationId, setApplicationId] = useState<string | null>(null);
-  const [otpValue, setOtpValue] = useState('');
-  const [resendCooldown, setResendCooldown] = useState(0);
-
   const courses = useCourses().map((c) => c.title);
+  const faqs = getFaqs(t);
 
   const handle = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm(p => ({ ...p, [e.target.name]: e.target.value }));
 
-  const startResendCooldown = () => {
-    setResendCooldown(60);
-    const interval = setInterval(() => {
-      setResendCooldown(c => {
-        if (c <= 1) {
-          clearInterval(interval);
-          return 0;
-        }
-        return c - 1;
-      });
-    }, 1000);
-  };
-
-  // Шаг 1: отправка формы
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -61,81 +44,23 @@ export default function ContactPage() {
           phone: form.phone,
           course: form.course,
           message: form.message,
+          language: i18n.resolvedLanguage?.startsWith('ky') ? 'ky' : 'ru',
         }),
       });
 
       const data = await res.json();
 
       if (!res.ok || !data.success) {
-        setError(
-          Array.isArray(data.errors) ? data.errors.join(', ') : data.error || 'Не удалось отправить заявку. Проверьте данные и попробуйте снова.'
-        );
-        return;
-      }
-
-      if (data.needsVerification) {
-        // Включена проверка номера по SMS-коду
-        setApplicationId(data.application.id);
-        setOtpValue('');
-        setStage('otp');
-        startResendCooldown();
-      } else {
-        // Проверка по SMS выключена — заявка сразу принята
-        setStage('done');
-        setForm({ name: '', phone: '', course: '', message: '' });
-      }
-    } catch {
-      setError('Не удалось связаться с сервером. Проверьте интернет-соединение и попробуйте позже.');
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  // Шаг 2 (только если включён REQUIRE_OTP): проверка кода из SMS
-  const submitOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!applicationId) return;
-    setError('');
-    setSubmitting(true);
-
-    try {
-      const res = await fetch(`${API_URL}/api/applications/${applicationId}/verify-otp`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: otpValue }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok || !data.success) {
-        setError(data.error || 'Неверный код. Попробуйте снова.');
+        setError(t(Array.isArray(data.errors) ? 'contact.errors.invalidData' : 'contact.errors.submit'));
         return;
       }
 
       setStage('done');
       setForm({ name: '', phone: '', course: '', message: '' });
     } catch {
-      setError('Не удалось связаться с сервером. Проверьте интернет-соединение и попробуйте позже.');
+      setError(t('contact.errors.connection'));
     } finally {
       setSubmitting(false);
-    }
-  };
-
-  const resendCode = async () => {
-    if (!applicationId || resendCooldown > 0) return;
-    setError('');
-    try {
-      const res = await fetch(`${API_URL}/api/applications/${applicationId}/resend-otp`, {
-        method: 'POST',
-      });
-      const data = await res.json();
-      if (!res.ok || !data.success) {
-        setError(data.error || 'Не удалось отправить код повторно.');
-        return;
-      }
-      startResendCooldown();
-    } catch {
-      setError('Не удалось связаться с сервером.');
     }
   };
 
@@ -165,13 +90,13 @@ export default function ContactPage() {
                   </div>
                   <h2 className="font-display text-lg font-semibold text-white mb-2">{t('contact.successMsg')}</h2>
                   <p className="text-[#7A82A8] text-sm max-w-sm">
-                    Заявка принята. Наш менеджер свяжется с вами в ближайшее время.
+                    {t('contact.successDetails')}
                   </p>
                   <button
                     onClick={() => setStage('form')}
                     className="mt-6 text-sm text-[#9B9FE8] hover:text-white transition-colors"
                   >
-                    Отправить ещё одну заявку
+                    {t('contact.sendAnother')}
                   </button>
                 </div>
               )}
@@ -241,59 +166,12 @@ export default function ContactPage() {
 
                     <button type="submit" disabled={submitting} className="btn-primary violet-glow w-full justify-center mt-auto disabled:opacity-60 disabled:cursor-not-allowed">
                       <RiSendPlaneLine size={16} />
-                      {submitting ? 'Отправка...' : t('contact.submitBtn')}
+                      {submitting ? t('contact.sending') : t('contact.submitBtn')}
                     </button>
                   </form>
                 </>
               )}
 
-              {stage === 'otp' && (
-                <div className="flex flex-col flex-1">
-                  <h2 className="font-display text-lg font-semibold text-white mb-2">Подтвердите номер</h2>
-                  <p className="text-[#7A82A8] text-sm mb-6">
-                    Мы отправили SMS с кодом на номер <span className="text-white">{form.phone}</span>. Введите его ниже.
-                  </p>
-
-                  {error && (
-                    <div className="mb-5 p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
-                      {error}
-                    </div>
-                  )}
-
-                  <form onSubmit={submitOtp} className="flex flex-col gap-5">
-                    <input
-                      value={otpValue}
-                      onChange={e => setOtpValue(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                      inputMode="numeric"
-                      placeholder="000000"
-                      maxLength={6}
-                      required
-                      className={`${inputCls} text-center text-2xl tracking-[0.5em] font-semibold`}
-                    />
-
-                    <button type="submit" disabled={submitting || otpValue.length < 4} className="btn-primary violet-glow w-full justify-center disabled:opacity-60 disabled:cursor-not-allowed">
-                      {submitting ? 'Проверка...' : 'Подтвердить'}
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={resendCode}
-                      disabled={resendCooldown > 0}
-                      className="text-sm text-[#9B9FE8] hover:text-white transition-colors disabled:text-[#7A82A8] disabled:cursor-not-allowed"
-                    >
-                      {resendCooldown > 0 ? `Отправить код ещё раз через ${resendCooldown} сек` : 'Отправить код ещё раз'}
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => { setStage('form'); setError(''); setOtpValue(''); }}
-                      className="text-xs text-[#7A82A8] hover:text-white transition-colors"
-                    >
-                      ← Изменить данные заявки
-                    </button>
-                  </form>
-                </div>
-              )}
             </div>
           </AnimSection>
 

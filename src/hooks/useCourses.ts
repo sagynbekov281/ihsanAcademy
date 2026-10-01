@@ -11,6 +11,9 @@ const icons: Record<string, IconType> = {
   code: RiCodeLine, react: RiReactjsLine, database: RiDatabaseLine, brush: RiBrushLine,
   chart: RiBarChartLine, shield: RiShieldCheckLine, phone: RiSmartphoneLine,
 };
+const courseKeys: Record<string, string> = {
+  react: 'frontend', database: 'backend', brush: 'uiux', chart: 'data', shield: 'cyber', phone: 'mobile',
+};
 
 type ApiCourse = {
   id: string; title: string; description: string; about: string; duration: string;
@@ -56,19 +59,49 @@ export function useCourses(): CourseView[] {
 
   return remote.map((c, i) => ({
     id: i + 1,
-    title: c.title,
-    description: c.description,
-    duration: c.duration,
-    level: c.level,
+    title: localizedCourseValue(t, c.iconKey, 'title', c.title),
+    description: localizedCourseValue(t, c.iconKey, 'description', c.description),
+    duration: localizedCourseValue(t, c.iconKey, 'duration', c.duration),
+    level: c.level === t(`courses.levels.${c.levelKey}`, { lng: 'ru' })
+      ? t(`courses.levels.${c.levelKey}`)
+      : c.level,
     levelKey: c.levelKey,
     price: money(c.finalPrice),
     oldPrice: c.discountPercent > 0 ? money(c.price) : undefined,
     discountPercent: c.discountPercent || undefined,
     icon: icons[c.iconKey] ?? RiCodeLine,
-    topics: c.topics,
-    about: c.about || c.description,
+    topics: localizedCourseTopics(t, c.iconKey, c.topics),
+    about: localizedCourseValue(t, c.iconKey, 'about', c.about || c.description),
     langs: c.langs,
     students: c.students,
     projects: c.projects,
   }));
+}
+
+function localizedCourseValue(
+  t: ReturnType<typeof useTranslation>['t'],
+  iconKey: string,
+  field: string,
+  source: string,
+) {
+  const courseKey = courseKeys[iconKey];
+  if (!courseKey) return source;
+
+  const translationKey = `courses.list.${courseKey}.${field}`;
+  const russianValue = t(translationKey, { lng: 'ru' });
+  return source === russianValue ? t(translationKey) : source;
+}
+
+function localizedCourseTopics(
+  t: ReturnType<typeof useTranslation>['t'],
+  iconKey: string,
+  source: string[],
+) {
+  const courseKey = courseKeys[iconKey];
+  if (!courseKey) return source;
+
+  const translationKey = `courses.list.${courseKey}.topics`;
+  const russianTopics = t(translationKey, { lng: 'ru', returnObjects: true }) as string[];
+  if (JSON.stringify(source) !== JSON.stringify(russianTopics)) return source;
+  return t(translationKey, { returnObjects: true }) as string[];
 }
