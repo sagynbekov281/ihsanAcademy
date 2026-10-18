@@ -6,7 +6,7 @@ export default function Footer() {
   const { t } = useTranslation();
 
   return (
-    <footer className="border-t border-[#7C3AED]/15 bg-[#05060F]">
+    <footer className="border-t border-[#7C3AED]/15 bg-[#020A2A]">
       <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-14 pb-8">
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
@@ -15,14 +15,14 @@ export default function Footer() {
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2.5 mb-4">
               <div className="w-8 h-8 rounded-lg border border-[#7C3AED]/40 flex items-center justify-center"
-                style={{ background: 'linear-gradient(135deg, #7C3AED/20, #A855F7/10)' }}>
-                <RiCodeSSlashLine className="text-[#A855F7]" size={15} />
+                style={{ background: 'linear-gradient(135deg, rgba(0,87,255,.25), rgba(166,107,255,.15))' }}>
+                <RiCodeSSlashLine className="text-[#A66BFF]" size={15} />
               </div>
               <span className="font-display font-bold text-white text-[17px] tracking-tight">
-                Ihsan<span style={{ background: 'linear-gradient(135deg, #A855F7, #C084FC)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Academy</span>
+                Ihsan<span style={{ background: 'linear-gradient(135deg, #A66BFF, #CDB2FF)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Academy</span>
               </span>
             </div>
-            <p className="text-[#475569] text-sm leading-relaxed mb-5">
+            <p className="text-[#C9D2F5] text-sm leading-relaxed mb-5">
               {t('footer.description')}
             </p>
             <div className="flex gap-2">
@@ -34,7 +34,7 @@ export default function Footer() {
                 <a
                   key={i}
                   href={href}
-                  className="w-9 h-9 rounded-xl border border-[#1E1B3A] flex items-center justify-center text-[#475569] hover:text-[#A855F7] hover:border-[#7C3AED]/40 hover:bg-[#7C3AED]/10 transition-all duration-200"
+                  className="w-9 h-9 rounded-xl border border-[#2A2F7A] flex items-center justify-center text-[#C9D2F5] hover:text-[#CDB2FF] hover:border-[#7C3AED]/40 hover:bg-[#7C3AED]/10 transition-all duration-200"
                 >
                   <Icon size={16} />
                 </a>
@@ -48,7 +48,7 @@ export default function Footer() {
             <ul className="space-y-2.5">
               {[['/', t('nav.home')], ['/courses', t('nav.courses')], ['/about', t('nav.about')], ['/contact', t('nav.contact')]].map(([to, label]) => (
                 <li key={to as string}>
-                  <Link to={to as string} className="text-[#475569] text-sm hover:text-[#A855F7] transition-colors duration-200">
+                  <Link to={to as string} className="text-[#C9D2F5] text-sm hover:text-[#CDB2FF] transition-colors duration-200">
                     {label as string}
                   </Link>
                 </li>
@@ -69,7 +69,7 @@ export default function Footer() {
                 t('contact.courses.mobile'),
               ]).map(c => (
                 <li key={c}>
-                  <Link to="/courses" className="text-[#475569] text-sm hover:text-[#A855F7] transition-colors duration-200">
+                  <Link to="/courses" className="text-[#C9D2F5] text-sm hover:text-[#CDB2FF] transition-colors duration-200">
                     {c}
                   </Link>
                 </li>
@@ -87,8 +87,8 @@ export default function Footer() {
                 { Icon: RiMailLine,   text: t('contact.email') },
                 { Icon: RiTimeLine,   text: t('footer.hours') },
               ].map(({ Icon, text }) => (
-                <li key={text} className="flex items-start gap-2.5 text-[#475569] text-sm">
-                  <Icon size={15} className="text-[#7C3AED] shrink-0 mt-0.5" />
+                <li key={text} className="flex items-start gap-2.5 text-[#C9D2F5] text-sm">
+                  <Icon size={15} className="text-[#A66BFF] shrink-0 mt-0.5" />
                   {text}
                 </li>
               ))}
@@ -98,8 +98,8 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="border-t border-[#7C3AED]/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <p className="text-[#334155] text-xs">{t('footer.rights')}</p>
-          <p className="text-[#334155] text-xs">{t('footer.location')}</p>
+          <p className="text-[#C9D2F5] text-xs">{t('footer.rights')}</p>
+          <p className="text-[#C9D2F5] text-xs">{t('footer.location')}</p>
         </div>
       </div>
     </footer>

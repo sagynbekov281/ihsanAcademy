@@ -4,8 +4,22 @@ export default {
   theme: {
     extend: {
       colors: {
+        // --- новая палитра (дизайн E2) ---
+        night:        '#020A2A', // основной фон
+        surface:      '#101336', // карточки
+        surface2:     '#1A1E54', // карточки при наведении
+        line:         '#2A2F7A', // обводки
+        brand:        '#0057FF', // кнопки
+        'brand-light':'#008CFF',
+        cyan:         '#00B7FF',
+        navy:         '#061A63',
+        accent:       '#A66BFF', // фиолетовый акцент
+        'accent-light':'#CDB2FF',
+        'accent-deep':'#7C3AED',
+        soft:         '#FFFFFF', // основной текст — чисто белый
+        dim:          '#D3D9F7', // подписи (светлее, чем раньше)
+        // --- старые цвета оставлены, чтобы другие страницы не сломались ---
         primary:    '#0B0D1A',
-        surface:    '#111428',
         card:       '#161B35',
         border:     '#1E2448',
         violet:     '#5B5BD6',
@@ -14,9 +28,12 @@ export default {
         muted:      '#7A82A8',
         light:      '#C8CEEA',
       },
+      // легче: bold→600, extrabold/black→700 (на всех страницах сразу)
+      fontWeight: { bold: '600', extrabold: '700', black: '700' },
       fontFamily: {
-        sans:    ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+        sans:     ['Manrope', 'system-ui', 'sans-serif'],
+        display:  ['Manrope', 'system-ui', 'sans-serif'],
+        headline: ['Montserrat', 'Manrope', 'sans-serif'],
       },
       animation: {
         'fade-up':   'fadeUp 0.7s ease both',

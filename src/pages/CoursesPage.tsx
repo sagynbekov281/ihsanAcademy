@@ -65,14 +65,14 @@ export default function CoursesPage() {
 
         {/* Header */}
         <AnimSection className="mb-16">
-          <p className="text-[#7B7FE8] text-xs font-semibold uppercase tracking-widest mb-2">{t('courses.tag')}</p>
+          <p className="text-[#A66BFF] text-xs font-semibold uppercase tracking-widest mb-2">{t('courses.tag')}</p>
           <div className="flex items-end gap-6 flex-wrap">
             <h1 className="font-display text-5xl sm:text-7xl font-bold text-white leading-none">{t('courses.title')}</h1>
-            <span className="text-[#1E2248] font-bold text-5xl sm:text-7xl leading-none select-none">
+            <span className="text-[#2A2F7A] font-bold text-5xl sm:text-7xl leading-none select-none">
               {String(courses.length).padStart(2, '0')}
             </span>
           </div>
-          <p className="text-[#7A82A8] max-w-sm text-sm leading-relaxed mt-4">
+          <p className="text-[#C9D2F5] max-w-sm text-sm leading-relaxed mt-4">
             {t('courses.subtitle')}
           </p>
         </AnimSection>
@@ -82,7 +82,7 @@ export default function CoursesPage() {
           {levels.map(({ key, label }) => (
             <button key={key} onClick={() => setActive(key)}
               className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
-                active === key ? 'bg-[#5B5BD6] text-white' : 'border border-[#1E2448] text-[#7A82A8] hover:border-[#5B5BD6]/40 hover:text-white'
+                active === key ? 'bg-[#0057FF] text-white' : 'border border-[#2A2F7A] text-[#C9D2F5] hover:border-[#A66BFF]/40 hover:text-white'
               }`}>
               {label}
             </button>
@@ -104,80 +104,80 @@ export default function CoursesPage() {
                 <div
                   id={`course-${course.id}`}
                   onClick={() => setSelected(course.id)}
-                  className={`group relative border rounded-2xl bg-[#0C0E1C] overflow-hidden cursor-pointer transition-all duration-300
-                    ${isSelected ? 'border-[#5B5BD6]/60 bg-[#0F1128]' : 'border-[#181B30]'}
-                    hover:border-[#5B5BD6]/50 hover:bg-[#0F1128] hover:shadow-[0_0_30px_-8px_rgba(91,91,214,0.25)]`}
+                  className={`group relative border rounded-2xl bg-[#101336] overflow-hidden cursor-pointer transition-all duration-300
+                    ${isSelected ? 'border-[#A66BFF]/60 bg-[#1A1E54]' : 'border-[#2A2F7A]'}
+                    hover:border-[#A66BFF]/50 hover:bg-[#1A1E54] hover:shadow-[0_0_30px_-8px_rgba(91,91,214,0.25)]`}
                 >
-                  <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#5B5BD6]/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#A66BFF]/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   {course.discountPercent && (
-                    <div className="absolute top-0 right-0 z-10 flex min-w-[116px] flex-col items-center rounded-bl-2xl rounded-tr-2xl bg-gradient-to-br from-[#7C3AED] to-[#5B5BD6] px-3 py-2 text-white shadow-lg shadow-[#5B5BD6]/25 sm:hidden">
+                    <div className="absolute top-0 right-0 z-10 flex min-w-[116px] flex-col items-center rounded-bl-2xl rounded-tr-2xl bg-gradient-to-br from-[#0057FF] to-[#008CFF] px-3 py-2 text-white shadow-lg shadow-[#0057FF]/25 sm:hidden">
                       <span className="text-sm font-black leading-tight">-{course.discountPercent}%</span>
                       <span className="text-[9px] font-semibold leading-tight">{course.discountEndsAt ? `${t('courses.discountUntil')} ${discountDate}` : discountDate}</span>
                     </div>
                   )}
 
                   <div className="flex flex-col sm:flex-row items-stretch">
-                    <div className="w-full sm:w-24 border-b border-[#181B30] sm:border-b-0 sm:border-r group-hover:border-[#2A2E52] flex items-center justify-center p-4 sm:p-0 shrink-0 transition-colors duration-300">
-                      <span className="font-bold text-2xl sm:text-3xl text-[#1E2248] group-hover:text-[#3A3E72] transition-colors duration-300 select-none">
+                    <div className="w-full sm:w-24 border-b border-[#2A2F7A] sm:border-b-0 sm:border-r group-hover:border-[#4A4FB0] flex items-center justify-center p-4 sm:p-0 shrink-0 transition-colors duration-300">
+                      <span className="font-bold text-2xl sm:text-3xl text-[#2A2F7A] group-hover:text-[#4A4FB0] transition-colors duration-300 select-none">
                         {num}
                       </span>
                     </div>
 
                     <div className="flex-1 flex flex-col sm:flex-row sm:items-center gap-4 p-5 sm:p-6 min-w-0">
                       <div className="flex items-center gap-4 w-full sm:w-64 shrink-0">
-                        <div className="w-11 h-11 rounded-xl bg-[#5B5BD6]/10 border border-[#5B5BD6]/20 group-hover:bg-[#5B5BD6]/15 group-hover:border-[#5B5BD6]/35 flex items-center justify-center shrink-0 transition-all duration-300">
-                          <Icon size={20} className="text-[#7B7FE8]" />
+                        <div className="w-11 h-11 rounded-xl bg-[#A66BFF]/10 border border-[#A66BFF]/20 group-hover:bg-[#A66BFF]/15 group-hover:border-[#A66BFF]/35 flex items-center justify-center shrink-0 transition-all duration-300">
+                          <Icon size={20} className="text-[#A66BFF]" />
                         </div>
                         <div>
-                          <h3 className="font-display text-base font-semibold text-white group-hover:text-[#C0C4FF] transition-colors duration-300">{course.title}</h3>
-                          <span className="text-xs text-[#7A82A8]">{course.level}</span>
+                          <h3 className="font-display text-base font-semibold text-white group-hover:text-[#FFFFFF] transition-colors duration-300">{course.title}</h3>
+                          <span className="text-xs text-[#C9D2F5]">{course.level}</span>
                         </div>
                       </div>
                       <div className="flex-1">
-                        <p className="text-[#7A82A8] text-sm leading-relaxed line-clamp-2 sm:line-clamp-1 group-hover:text-[#9AA0C0] transition-colors duration-300">{course.description}</p>
+                        <p className="text-[#C9D2F5] text-sm leading-relaxed line-clamp-2 sm:line-clamp-1 group-hover:text-[#F1F4FF] transition-colors duration-300">{course.description}</p>
                         <div className="mt-3 flex flex-wrap gap-2 md:hidden">
                           {course.topics.slice(0, 2).map((topic: string) => (
-                            <span key={topic} className="flex items-center gap-1 text-xs text-[#9AA0C0] bg-[#181B30] group-hover:bg-[#1E2140] rounded-full px-3 py-1 transition-colors duration-300">
-                              <RiCheckLine size={10} className="text-[#5B5BD6]/60" /> {topic}
+                            <span key={topic} className="flex items-center gap-1 text-xs text-[#F1F4FF] bg-[#2A2F7A] group-hover:bg-[#1A1E54] rounded-full px-3 py-1 transition-colors duration-300">
+                              <RiCheckLine size={10} className="text-[#A66BFF]/60" /> {topic}
                             </span>
                           ))}
-                          {course.topics.length > 2 && <span className="text-xs text-[#7A82A8] px-1 py-1">+{course.topics.length - 2}</span>}
+                          {course.topics.length > 2 && <span className="text-xs text-[#C9D2F5] px-1 py-1">+{course.topics.length - 2}</span>}
                         </div>
                       </div>
                       <div className="hidden lg:flex flex-wrap gap-2 w-48 shrink-0">
                         {course.topics.slice(0, 3).map((topic: string) => (
-                          <span key={topic} className="flex items-center gap-1 text-xs text-[#9AA0C0] bg-[#181B30] group-hover:bg-[#1E2140] rounded-full px-3 py-1 transition-colors duration-300">
-                            <RiCheckLine size={10} className="text-[#5B5BD6]/60" /> {topic}
+                          <span key={topic} className="flex items-center gap-1 text-xs text-[#F1F4FF] bg-[#2A2F7A] group-hover:bg-[#1A1E54] rounded-full px-3 py-1 transition-colors duration-300">
+                            <RiCheckLine size={10} className="text-[#A66BFF]/60" /> {topic}
                           </span>
                         ))}
-                        {course.topics.length > 3 && <span className="text-xs text-[#7A82A8] px-1 py-1">+{course.topics.length - 3}</span>}
+                        {course.topics.length > 3 && <span className="text-xs text-[#C9D2F5] px-1 py-1">+{course.topics.length - 3}</span>}
                       </div>
                     </div>
 
-                    <div className="w-full sm:w-auto border-t border-[#181B30] sm:border-t-0 sm:border-l group-hover:border-[#2A2E52] flex flex-col items-start sm:items-end justify-center gap-2 px-5 sm:px-6 py-5 transition-colors duration-300">
+                    <div className="w-full sm:w-auto border-t border-[#2A2F7A] sm:border-t-0 sm:border-l group-hover:border-[#4A4FB0] flex flex-col items-start sm:items-end justify-center gap-2 px-5 sm:px-6 py-5 transition-colors duration-300">
                       {course.discountPercent && (
-                        <div className="hidden sm:flex items-center gap-2 rounded-full bg-gradient-to-br from-[#7C3AED] to-[#5B5BD6] px-3 py-1.5 text-white shadow-md shadow-[#5B5BD6]/20">
+                        <div className="hidden sm:flex items-center gap-2 rounded-full bg-gradient-to-br from-[#0057FF] to-[#008CFF] px-3 py-1.5 text-white shadow-md shadow-[#0057FF]/20">
                           <span className="text-xs font-black">-{course.discountPercent}%</span>
                           <span className="text-[10px] font-medium">{course.discountEndsAt ? `${t('courses.discountUntil')} ${discountDate}` : discountDate}</span>
                         </div>
                       )}
                       <div className="flex flex-col items-start sm:items-end leading-tight">
                         {course.oldPrice && (
-                          <span className="text-xs text-[#7A82A8] line-through">
+                          <span className="text-xs text-[#C9D2F5] line-through">
                             {t('courses.priceBeforeDiscount')}: {course.oldPrice}
                           </span>
                         )}
                         {course.discountPercent && (
-                          <span className="mt-1 text-[10px] font-semibold uppercase text-[#B7ADFF]">{t('courses.discountPrice')}</span>
+                          <span className="mt-1 text-[10px] font-semibold uppercase text-[#CDB2FF]">{t('courses.discountPrice')}</span>
                         )}
                         <span className={`mt-0.5 font-black ${course.discountPercent ? 'text-2xl text-white' : 'text-base text-white'}`}>
                           {course.price}
                         </span>
                       </div>
-                      <p className="text-[#7A82A8] text-xs flex items-center gap-1">
+                      <p className="text-[#C9D2F5] text-xs flex items-center gap-1">
                         <RiTimeLine size={11} /> {course.duration}
                       </p>
-                      <div className="mt-1 inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#5B5BD6]/10 border border-[#5B5BD6]/20 group-hover:bg-[#5B5BD6]/20 group-hover:border-[#5B5BD6]/40 text-[#9B9FE8] text-sm font-medium transition-all duration-300 whitespace-nowrap">
+                      <div className="mt-1 inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#A66BFF]/10 border border-[#A66BFF]/20 group-hover:bg-[#A66BFF]/20 group-hover:border-[#A66BFF]/40 text-[#CDB2FF] text-sm font-medium transition-all duration-300 whitespace-nowrap">
                         {t('courses.details')} <RiArrowRightLine size={13} className="group-hover:translate-x-0.5 transition-transform duration-300" />
                       </div>
                     </div>
@@ -189,7 +189,7 @@ export default function CoursesPage() {
         </div>
 
         {/* Divider + stats */}
-        <div className="border-t border-[#181B30] mt-10 mb-8" />
+        <div className="border-t border-[#2A2F7A] mt-10 mb-8" />
         <AnimSection>
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
             <div className="flex gap-10">
@@ -200,11 +200,11 @@ export default function CoursesPage() {
               ].map(({ value, label }) => (
                 <div key={label}>
                   <p className="text-white font-bold text-2xl leading-none">{value}</p>
-                  <p className="text-[#7A82A8] text-xs mt-1">{label}</p>
+                  <p className="text-[#C9D2F5] text-xs mt-1">{label}</p>
                 </div>
               ))}
             </div>
-            <Link to="/contact" className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[#5B5BD6]/30 text-[#9B9FE8] text-sm font-medium hover:bg-[#5B5BD6]/10 transition-all">
+            <Link to="/contact" className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[#A66BFF]/30 text-[#CDB2FF] text-sm font-medium hover:bg-[#A66BFF]/10 transition-all">
               <RiUserLine size={14} /> {t('cta.getConsultation')}
             </Link>
           </div>
@@ -220,35 +220,35 @@ export default function CoursesPage() {
           <div className="absolute inset-0 bg-[#04050F]/80 backdrop-blur-sm" />
 
           <div
-            className="relative w-full sm:max-w-xl bg-[#0C0E1C] border border-[#1E2448] rounded-t-3xl sm:rounded-2xl overflow-hidden shadow-2xl z-10 animate-[slideUp_0.25s_ease]"
+            className="relative w-full sm:max-w-xl bg-[#101336] border border-[#2A2F7A] rounded-t-3xl sm:rounded-2xl overflow-hidden shadow-2xl z-10 animate-[slideUp_0.25s_ease]"
             style={{ animation: 'slideUp 0.25s cubic-bezier(0.16,1,0.3,1)', maxHeight: 'calc(100vh - 2rem)' }}
             onClick={e => e.stopPropagation()}
           >
-            <div className="h-px w-full bg-gradient-to-r from-transparent via-[#5B5BD6]/60 to-transparent" />
+            <div className="h-px w-full bg-gradient-to-r from-transparent via-[#A66BFF]/60 to-transparent" />
 
             <div className="flex flex-col overflow-hidden" style={{ maxHeight: 'calc(100vh - 3rem)' }}>
-              <div className="sticky top-0 z-10 bg-[#0C0E1C] border-b border-[#1E2448] px-6 sm:px-7 py-4">
+              <div className="sticky top-0 z-10 bg-[#101336] border-b border-[#2A2F7A] px-6 sm:px-7 py-4">
                 <div className="flex justify-center sm:hidden pb-3">
-                  <div className="w-10 h-1 rounded-full bg-[#2A2E52]" />
+                  <div className="w-10 h-1 rounded-full bg-[#4A4FB0]" />
                 </div>
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-11 h-11 rounded-xl bg-[#5B5BD6]/15 border border-[#5B5BD6]/25 flex items-center justify-center shrink-0">
-                      {(() => { const Icon = selectedCourse.icon; return <Icon size={18} className="text-[#7B7FE8]" />; })()}
+                    <div className="w-11 h-11 rounded-xl bg-[#A66BFF]/15 border border-[#A66BFF]/25 flex items-center justify-center shrink-0">
+                      {(() => { const Icon = selectedCourse.icon; return <Icon size={18} className="text-[#A66BFF]" />; })()}
                     </div>
                     <div>
                       <h2 className="font-display text-lg font-bold text-white">{selectedCourse.title}</h2>
-                      <span className="text-xs text-[#7A82A8]">{selectedCourse.level}</span>
+                      <span className="text-xs text-[#C9D2F5]">{selectedCourse.level}</span>
                     </div>
                   </div>
-                  <button onClick={() => setSelected(null)} className="w-8 h-8 rounded-lg bg-[#181B30] flex items-center justify-center text-[#7A82A8] hover:text-white transition-colors">
+                  <button onClick={() => setSelected(null)} className="w-8 h-8 rounded-lg bg-[#2A2F7A] flex items-center justify-center text-[#C9D2F5] hover:text-white transition-colors">
                     <RiCloseLine size={16} />
                   </button>
                 </div>
               </div>
 
               <div className="p-6 sm:p-7 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 8rem)' }}>
-                <p className="text-[#9AA0C0] text-sm leading-relaxed mb-6">{selectedExtra.about}</p>
+                <p className="text-[#F1F4FF] text-sm leading-relaxed mb-6">{selectedExtra.about}</p>
 
                 <div className="grid grid-cols-3 gap-3 mb-6">
                   {[
@@ -256,54 +256,54 @@ export default function CoursesPage() {
                     { icon: RiTimeLine,  value: selectedCourse.duration,      label: t('courses.duration') },
                     { icon: RiMedalLine, value: `${selectedExtra.projects}`,  label: t('courses.projects') },
                   ].map(({ icon: Ic, value, label }) => (
-                    <div key={label} className="border border-[#1E2448] rounded-xl p-3 bg-[#0F1128] text-center">
-                      <Ic size={14} className="text-[#7B7FE8] mx-auto mb-1.5" />
+                    <div key={label} className="border border-[#2A2F7A] rounded-xl p-3 bg-[#1A1E54] text-center">
+                      <Ic size={14} className="text-[#A66BFF] mx-auto mb-1.5" />
                       <p className="text-white font-semibold text-sm">{value}</p>
-                      <p className="text-[#7A82A8] text-[10px] mt-0.5">{label}</p>
+                      <p className="text-[#C9D2F5] text-[10px] mt-0.5">{label}</p>
                     </div>
                   ))}
                 </div>
 
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-3">
-                    <RiCodeLine size={13} className="text-[#7B7FE8]" />
-                    <p className="text-[#7A82A8] text-xs uppercase tracking-widest">{t('courses.technologies')}</p>
+                    <RiCodeLine size={13} className="text-[#A66BFF]" />
+                    <p className="text-[#C9D2F5] text-xs uppercase tracking-widest">{t('courses.technologies')}</p>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {selectedExtra.langs.map(l => (
-                      <span key={l} className="text-xs text-[#9B9FE8] bg-[#5B5BD6]/10 border border-[#5B5BD6]/20 rounded-full px-3 py-1">{l}</span>
+                      <span key={l} className="text-xs text-[#CDB2FF] bg-[#A66BFF]/10 border border-[#A66BFF]/20 rounded-full px-3 py-1">{l}</span>
                     ))}
                   </div>
                 </div>
 
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-3">
-                    <RiBookOpenLine size={13} className="text-[#7B7FE8]" />
-                    <p className="text-[#7A82A8] text-xs uppercase tracking-widest">{t('courses.program')}</p>
+                    <RiBookOpenLine size={13} className="text-[#A66BFF]" />
+                    <p className="text-[#C9D2F5] text-xs uppercase tracking-widest">{t('courses.program')}</p>
                   </div>
                   <ul className="space-y-2">
                     {selectedCourse.topics.map((topic: string) => (
-                      <li key={topic} className="flex items-center gap-2.5 text-sm text-[#9AA0C0]">
-                        <RiCheckLine size={13} className="text-[#5B5BD6]/70 shrink-0" /> {topic}
+                      <li key={topic} className="flex items-center gap-2.5 text-sm text-[#F1F4FF]">
+                        <RiCheckLine size={13} className="text-[#A66BFF]/70 shrink-0" /> {topic}
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                <div className="border-t border-[#1E2448] pt-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="border-t border-[#2A2F7A] pt-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <div>
                     <p className="text-white font-bold text-lg">
-                      {selectedCourse.oldPrice && <span className="text-[#7A82A8] text-sm line-through mr-2">{selectedCourse.oldPrice}</span>}
+                      {selectedCourse.oldPrice && <span className="text-[#C9D2F5] text-sm line-through mr-2">{selectedCourse.oldPrice}</span>}
                       {selectedCourse.price}
-                      {selectedCourse.discountPercent ? <span className="ml-2 text-xs font-bold text-white bg-[#5B5BD6] rounded-full px-2 py-0.5">-{selectedCourse.discountPercent}%</span> : null}
+                      {selectedCourse.discountPercent ? <span className="ml-2 text-xs font-bold text-white bg-[#0057FF] rounded-full px-2 py-0.5">-{selectedCourse.discountPercent}%</span> : null}
                     </p>
-                    <p className="text-[#7A82A8] text-xs mt-0.5">{t('courses.perCourse')}</p>
+                    <p className="text-[#C9D2F5] text-xs mt-0.5">{t('courses.perCourse')}</p>
                   </div>
                   <Link
                     to="/contact"
                     state={{ course: selectedCourse.title }}
                     onClick={() => setSelected(null)}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#5B5BD6] text-white text-sm font-medium hover:bg-[#4a4ac4] transition-all shadow-lg shadow-[#5B5BD6]/20"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0057FF] text-white text-sm font-medium hover:bg-[#008CFF] transition-all shadow-lg shadow-[#0057FF]/20"
                   >
                     {t('courses.enroll')} <RiArrowRightLine size={14} />
                   </Link>

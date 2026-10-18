@@ -10,14 +10,14 @@ export default function TeachersPage() {
   const teachers = useTeachers();
 
   return (
-    <main className="min-h-screen bg-[#07080F] text-white pt-28 pb-24 background: 'linear-gradient(135deg, #1a0533 0%, #0f0a2e 40%, #1e0a3c 70%, #0d0520 100%)'">
+    <main className="min-h-screen bg-[#020A2A] text-white pt-28 pb-24">
       <div className="max-w-6xl mx-auto px-5 sm:px-8">
 
         {/* Back */}
         <AnimSection>
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-sm text-[#7C3AED] hover:text-[#A855F7] transition-colors mb-10"
+            className="inline-flex items-center gap-2 text-sm text-[#A66BFF] hover:text-[#CDB2FF] transition-colors mb-10"
           >
             <RiArrowLeftLine size={16} />
             {t('teachers.backHome')}
@@ -27,9 +27,9 @@ export default function TeachersPage() {
         {/* Header */}
         <AnimSection>
           <div className="mb-16">
-            <p className="text-[#6D28D9] text-xs font-bold uppercase tracking-widest mb-3">{t('teachers.tag')}</p>
+            <p className="text-[#A66BFF] text-xs font-bold uppercase tracking-widest mb-3">{t('teachers.tag')}</p>
             <h1 className="text-4xl sm:text-5xl font-black mb-4">{t('teachers.title')}</h1>
-            <p className="text-[#94A3B8] text-base max-w-xl leading-relaxed">
+            <p className="text-[#FFFFFF] text-base max-w-xl leading-relaxed">
               {t('teachers.description')}
             </p>
           </div>
@@ -41,28 +41,28 @@ export default function TeachersPage() {
             <AnimSection key={teacher.id} delay={i * 80}>
               <div
                 onClick={() => navigate(`/teachers/${teacher.id}`)}
-                className="group relative rounded-[2rem] border border-[#1E1B3A] bg-[#0D0B1E] p-8 shadow-[0_22px_120px_rgba(109,40,217,0.08)] transition-all duration-500 hover:-translate-y-2 hover:border-[#7C3AED]/40 hover:shadow-[0_30px_160px_rgba(124,58,237,0.20)] flex flex-col h-full overflow-visible cursor-pointer"
+                className="group relative rounded-[2rem] border border-[#2A2F7A] bg-[#101336] p-8 shadow-[0_22px_120px_rgba(109,40,217,0.08)] transition-all duration-500 hover:-translate-y-2 hover:border-[#7C3AED]/40 hover:shadow-[0_30px_160px_rgba(124,58,237,0.20)] flex flex-col h-full overflow-visible cursor-pointer"
               >
                 {/* Experience badge */}
                 <div className="absolute left-1/2 -translate-x-1/2 -top-4">
-                  <span className="rounded-full border border-[#7C3AED]/20 bg-[#131127] px-4 py-2 text-[11px] uppercase tracking-[0.25em] text-[#A78BFA] whitespace-nowrap inline-block">
+                  <span className="rounded-full border border-[#7C3AED]/20 bg-[#1A1E54] px-4 py-2 text-[11px] uppercase tracking-[0.25em] text-[#CDB2FF] whitespace-nowrap inline-block">
                     {teacher.experience}
                   </span>
                 </div>
 
                 {/* Avatar + name */}
                 <div className="flex items-center gap-3 mb-6 mt-5">
-                  <div className="grid h-14 w-14 place-items-center rounded-[1.35rem] bg-gradient-to-br from-[#6D28D9] to-[#A855F7] text-base font-black text-white shadow-xl shadow-[#7C3AED]/15 shrink-0">
+                  <div className="grid h-14 w-14 place-items-center rounded-[1.35rem] bg-gradient-to-br from-[#6D28D9] to-[#A66BFF] text-base font-black text-white shadow-xl shadow-[#7C3AED]/15 shrink-0">
                     <RiUser3Line size={20} className="text-white" />
                   </div>
                   <div className="flex-1">
                     <p className="text-white text-base font-semibold leading-snug">{teacher.name}</p>
-                    <p className="text-[#94A3B8] text-[11px] mt-1">{teacher.role}</p>
+                    <p className="text-[#FFFFFF] text-[11px] mt-1">{teacher.role}</p>
                   </div>
                 </div>
 
                 {/* Bio */}
-                <p className="text-[#c7d2fe] text-sm leading-relaxed mb-6 flex-1">{teacher.bio}</p>
+                <p className="text-[#FFFFFF] text-sm leading-relaxed mb-6 flex-1">{teacher.bio}</p>
 
                 {/* Subjects */}
                 <div className="mb-6">
@@ -71,7 +71,7 @@ export default function TeachersPage() {
                     {teacher.subjects.map(subject => (
                       <span
                         key={subject}
-                        className="rounded-full border border-[#2b1b52] bg-[#100f26] px-3 py-1.5 text-xs text-[#dbeafe] font-medium transition-all duration-300 group-hover:border-[#7C3AED]/40 group-hover:bg-[#131127]"
+                        className="rounded-full border border-[#2A2F7A] bg-[#020A2A] px-3 py-1.5 text-xs text-[#FFFFFF] font-medium transition-all duration-300 group-hover:border-[#7C3AED]/40 group-hover:bg-[#1A1E54]"
                       >
                         {subject}
                       </span>
@@ -82,15 +82,15 @@ export default function TeachersPage() {
                 {/* Footer row */}
                 <div
                   onClick={(e) => e.stopPropagation()}
-                  className="flex items-center justify-between pt-5 border-t border-[#1E1B3A]"
+                  className="flex items-center justify-between pt-5 border-t border-[#2A2F7A]"
                 >
                   <Link
                     to="/contact"
-                    className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#7C3AED] to-[#a855f7] px-5 py-3 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(124,58,237,0.25)] transition-all duration-300 hover:brightness-110"
+                    className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#0057FF] to-[#008CFF] px-5 py-3 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(124,58,237,0.25)] transition-all duration-300 hover:brightness-110"
                   >
                     {t('teachers.enroll')}
                   </Link>
-                  <span className="flex items-center gap-1 text-xs text-[#475569] group-hover:text-[#A855F7] transition-colors">
+                  <span className="flex items-center gap-1 text-xs text-[#C9D2F5] group-hover:text-[#CDB2FF] transition-colors">
                     {t('teachers.details')} <RiArrowRightLine size={13} className="group-hover:translate-x-0.5 transition-transform" />
                   </span>
                 </div>
@@ -101,13 +101,13 @@ export default function TeachersPage() {
 
         {/* Bottom CTA */}
         <AnimSection>
-          <div className="mt-20 relative rounded-3xl overflow-hidden bg-[#0B0C12] border border-[#1F2130] py-14 px-8 sm:px-16 text-center" style={{ background: 'linear-gradient(135deg, #1a0533 0%, #0f0a2e 40%, #1e0a3c 70%, #0d0520 100%)' }}>
-            <div className="absolute top-0 right-0 w-72 h-72 rounded-full bg-[#A855F7]/10 blur-[80px] pointer-events-none" />
+          <div className="mt-20 relative rounded-3xl overflow-hidden bg-[#101336] border border-[#2A2F7A] py-14 px-8 sm:px-16 text-center" style={{ background: 'linear-gradient(135deg, #061A63 0%, #101336 40%, #1A1E54 70%, #020A2A 100%)' }}>
+            <div className="absolute top-0 right-0 w-72 h-72 rounded-full bg-[#A66BFF]/10 blur-[80px] pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-56 h-56 rounded-full bg-[#6D28D9]/10 blur-[60px] pointer-events-none" />
             <div className="relative">
-              <p className="text-[#6D28D9] text-xs font-bold uppercase tracking-widest mb-3">{t('teachers.ctaTag')}</p>
+              <p className="text-[#A66BFF] text-xs font-bold uppercase tracking-widest mb-3">{t('teachers.ctaTag')}</p>
               <h2 className="text-2xl sm:text-4xl font-black text-white mb-4">{t('teachers.ctaTitle')}</h2>
-              <p className="text-[#94A3B8] mb-8 max-w-sm mx-auto text-sm leading-relaxed">
+              <p className="text-[#FFFFFF] mb-8 max-w-sm mx-auto text-sm leading-relaxed">
                 {t('teachers.ctaSub')}
               </p>
               <Link

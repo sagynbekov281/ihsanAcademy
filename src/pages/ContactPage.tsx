@@ -64,16 +64,16 @@ export default function ContactPage() {
     }
   };
 
-  const inputCls = "w-full bg-[#0B0D1A] border border-[#1E2448] rounded-xl px-4 py-3 text-white text-base sm:text-sm placeholder-[#7A82A8] focus:outline-none focus:border-[#5B5BD6] transition-colors";
+  const inputCls = "w-full bg-[#020A2A] border border-[#2A2F7A] rounded-xl px-4 py-3 text-white text-base sm:text-sm placeholder-[#C9D2F5] focus:outline-none focus:border-[#A66BFF] transition-colors";
 
   return (
     <main className="min-h-screen pt-24">
       <div className="max-w-6xl mx-auto px-5 sm:px-8 py-10">
         {/* Header */}
         <AnimSection className="max-w-xl mb-12">
-          <p className="text-[#7B7FE8] text-xs font-semibold uppercase tracking-widest mb-2">{t('contact.tag')}</p>
+          <p className="text-[#A66BFF] text-xs font-semibold uppercase tracking-widest mb-2">{t('contact.tag')}</p>
           <h1 className="font-display text-3xl sm:text-4xl font-bold text-white mb-3">{t('contact.title')}</h1>
-          <p className="text-[#7A82A8] text-sm leading-relaxed">
+          <p className="text-[#C9D2F5] text-sm leading-relaxed">
             {t('contact.description')}
           </p>
         </AnimSection>
@@ -81,20 +81,20 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-16 items-stretch">
           {/* Form */}
           <AnimSection className="lg:col-span-3 flex flex-col">
-            <div className="border border-[#1E2448] rounded-2xl p-6 sm:p-8 bg-[#111428]/80 flex flex-col flex-1">
+            <div className="border border-[#2A2F7A] rounded-2xl p-6 sm:p-8 bg-[#101336]/80 flex flex-col flex-1">
 
               {stage === 'done' && (
                 <div className="flex flex-col items-center justify-center flex-1 text-center py-10">
-                  <div className="w-14 h-14 rounded-full bg-[#5B5BD6]/15 border border-[#5B5BD6]/30 flex items-center justify-center mb-4">
-                    <RiSendPlaneLine size={22} className="text-[#7B7FE8]" />
+                  <div className="w-14 h-14 rounded-full bg-[#A66BFF]/15 border border-[#A66BFF]/30 flex items-center justify-center mb-4">
+                    <RiSendPlaneLine size={22} className="text-[#A66BFF]" />
                   </div>
                   <h2 className="font-display text-lg font-semibold text-white mb-2">{t('contact.successMsg')}</h2>
-                  <p className="text-[#7A82A8] text-sm max-w-sm">
+                  <p className="text-[#C9D2F5] text-sm max-w-sm">
                     {t('contact.successDetails')}
                   </p>
                   <button
                     onClick={() => setStage('form')}
-                    className="mt-6 text-sm text-[#9B9FE8] hover:text-white transition-colors"
+                    className="mt-6 text-sm text-[#CDB2FF] hover:text-white transition-colors"
                   >
                     {t('contact.sendAnother')}
                   </button>
@@ -112,40 +112,40 @@ export default function ContactPage() {
                   <form onSubmit={submit} className="flex flex-col flex-1 gap-5">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="text-xs text-[#7A82A8] mb-1.5 block">{t('contact.labelName')} *</label>
+                        <label className="text-xs text-[#C9D2F5] mb-1.5 block">{t('contact.labelName')} *</label>
                         <input name="name" value={form.name} onChange={handle} required placeholder={t('contact.placeholderName')} className={inputCls} />
                       </div>
                       <div>
-                        <label className="text-xs text-[#7A82A8] mb-1.5 block">{t('contact.labelPhone')} *</label>
+                        <label className="text-xs text-[#C9D2F5] mb-1.5 block">{t('contact.labelPhone')} *</label>
                         <input name="phone" value={form.phone} onChange={handle} required placeholder={t('contact.placeholderPhone')} className={inputCls} />
                       </div>
                     </div>
 
                     {/* Custom dropdown */}
                     <div className="relative">
-                      <label className="text-xs text-[#7A82A8] mb-1.5 block">{t('contact.labelCourse')}</label>
+                      <label className="text-xs text-[#C9D2F5] mb-1.5 block">{t('contact.labelCourse')}</label>
                       <button
                         type="button"
                         onClick={() => setOpen(p => !p)}
-                        className="w-full bg-[#0B0D1A] border border-[#1E2448] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#5B5BD6] transition-colors flex items-center justify-between"
+                        className="w-full bg-[#020A2A] border border-[#2A2F7A] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#A66BFF] transition-colors flex items-center justify-between"
                       >
-                        <span className={form.course ? 'text-white' : 'text-[#7A82A8]'}>
+                        <span className={form.course ? 'text-white' : 'text-[#C9D2F5]'}>
                           {form.course || t('contact.placeholderCourse')}
                         </span>
                         <RiArrowDownSLine
-                          className={`text-[#7A82A8] transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+                          className={`text-[#C9D2F5] transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
                           size={18}
                         />
                       </button>
 
                       {open && (
-                        <div className="absolute z-50 mt-2 w-full bg-[#0B0D1A] border border-[#1E2448] rounded-2xl overflow-hidden shadow-xl">
+                        <div className="absolute z-50 mt-2 w-full bg-[#020A2A] border border-[#2A2F7A] rounded-2xl overflow-hidden shadow-xl">
                           {courses.map(course => (
                             <div
                               key={course}
                               onClick={() => { setForm(p => ({ ...p, course })); setOpen(false); }}
-                              className={`px-5 py-3 text-sm cursor-pointer transition-colors hover:bg-[#5B5BD6]/20 hover:text-white
-                                ${form.course === course ? 'text-[#7B7FE8] bg-[#5B5BD6]/10' : 'text-[#7A82A8]'}`}
+                              className={`px-5 py-3 text-sm cursor-pointer transition-colors hover:bg-[#A66BFF]/20 hover:text-white
+                                ${form.course === course ? 'text-[#A66BFF] bg-[#A66BFF]/10' : 'text-[#C9D2F5]'}`}
                             >
                               {course}
                             </div>
@@ -155,7 +155,7 @@ export default function ContactPage() {
                     </div>
 
                     <div className="flex flex-col flex-1">
-                      <label className="text-xs text-[#7A82A8] mb-1.5 block">{t('contact.labelMessage')}</label>
+                      <label className="text-xs text-[#C9D2F5] mb-1.5 block">{t('contact.labelMessage')}</label>
                       <textarea
                         name="message" value={form.message} onChange={handle}
                         rows={7} placeholder={t('contact.placeholderMessage')}
@@ -177,7 +177,7 @@ export default function ContactPage() {
 
           {/* Info */}
           <AnimSection className="lg:col-span-2 flex flex-col gap-4">
-            <div className="border border-[#1E2448] rounded-2xl p-5 bg-[#111428]/80">
+            <div className="border border-[#2A2F7A] rounded-2xl p-5 bg-[#101336]/80">
               <h3 className="text-white font-semibold text-sm mb-4">{t('contact.infoTitle')}</h3>
               <div className="space-y-3.5">
                 {[
@@ -187,11 +187,11 @@ export default function ContactPage() {
                   { icon: RiTimeLine,   label: t('contact.labelHours'),    value: t('contact.hours') },
                 ].map(({ icon: Icon, label, value }) => (
                   <div key={label} className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-[#5B5BD6]/15 border border-[#5B5BD6]/25 flex items-center justify-center shrink-0 mt-0.5">
-                      <Icon className="text-[#7B7FE8]" size={14} />
+                    <div className="w-8 h-8 rounded-lg bg-[#A66BFF]/15 border border-[#A66BFF]/25 flex items-center justify-center shrink-0 mt-0.5">
+                      <Icon className="text-[#A66BFF]" size={14} />
                     </div>
                     <div>
-                      <p className="text-[#7A82A8] text-xs mb-0.5">{label}</p>
+                      <p className="text-[#C9D2F5] text-xs mb-0.5">{label}</p>
                       <p className="text-white text-sm">{value}</p>
                     </div>
                   </div>
@@ -199,7 +199,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <div className="border border-[#1E2448] rounded-2xl p-5 bg-[#111428]/80">
+            <div className="border border-[#2A2F7A] rounded-2xl p-5 bg-[#101336]/80">
               <h3 className="text-white font-semibold text-sm mb-4">{t('contact.socialTitle')}</h3>
               <div className="space-y-2.5">
                 {[
@@ -207,13 +207,13 @@ export default function ContactPage() {
                   { icon: RiInstagramLine, label: 'Instagram', val: '@ihsanacademy' },
                   { icon: RiWhatsappLine,  label: 'WhatsApp',  val: '+996 700 123 456' },
                 ].map(({ icon: Icon, label, val }) => (
-                  <a key={label} href="#" className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-[#5B5BD6]/8 transition-all group">
-                    <div className="w-7 h-7 rounded-lg bg-[#5B5BD6]/15 flex items-center justify-center">
-                      <Icon className="text-[#7B7FE8]" size={14} />
+                  <a key={label} href="#" className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-[#A66BFF]/8 transition-all group">
+                    <div className="w-7 h-7 rounded-lg bg-[#A66BFF]/15 flex items-center justify-center">
+                      <Icon className="text-[#A66BFF]" size={14} />
                     </div>
                     <div>
                       <p className="text-white text-xs font-medium">{label}</p>
-                      <p className="text-[#7A82A8] text-xs">{val}</p>
+                      <p className="text-[#C9D2F5] text-xs">{val}</p>
                     </div>
                   </a>
                 ))}
@@ -224,15 +224,15 @@ export default function ContactPage() {
 
         {/* FAQ */}
         <AnimSection className="mb-2">
-          <p className="text-[#7B7FE8] text-xs font-semibold uppercase tracking-widest mb-2">{t('contact.faqTag')}</p>
+          <p className="text-[#A66BFF] text-xs font-semibold uppercase tracking-widest mb-2">{t('contact.faqTag')}</p>
           <h2 className="font-display text-2xl font-bold text-white mb-8">{t('contact.faqTitle')}</h2>
         </AnimSection>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {faqs.map(({ q, a }, i) => (
             <AnimSection key={q} delay={i * 60}>
-              <div className="border border-[#1E2448] rounded-2xl p-5 bg-[#111428]/80">
+              <div className="border border-[#2A2F7A] rounded-2xl p-5 bg-[#101336]/80">
                 <p className="text-white text-sm font-semibold mb-2">{q}</p>
-                <p className="text-[#7A82A8] text-sm leading-relaxed">{a}</p>
+                <p className="text-[#C9D2F5] text-sm leading-relaxed">{a}</p>
               </div>
             </AnimSection>
           ))}
