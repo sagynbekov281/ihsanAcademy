@@ -3,18 +3,15 @@ import { getStats } from '../data';
 import { Link } from 'react-router-dom';
 import { RiArrowRightLine, RiUser3Line } from 'react-icons/ri';
 import { useTranslation } from 'react-i18next';
+import { useTeachers } from '../hooks/useTeachers';
 
-const team = [
-  { name: 'Ихсан Усупов', role: 'about.team.founder.role', exp: 'about.team.founder.experience' },
-  { name: 'Айбек Джакыпов', role: 'about.team.leadTeacher.role', exp: 'about.team.leadTeacher.experience' },
-  { name: 'Нурлан Сатывалдиев', role: 'about.team.backendMentor.role', exp: 'about.team.backendMentor.experience' },
-  { name: 'Зарина Асанова', role: 'about.team.designMentor.role', exp: 'about.team.designMentor.experience' },
-];
+// Сколько человек показывать в блоке «Команда» (берутся из преподавателей, их добавляют в админке → «Учителя»)
+const MAX_TEAM = 4;
 
 export default function AboutPage() {
   const { t } = useTranslation();
-
   const stats = getStats(t);
+  const team = useTeachers().slice(0, MAX_TEAM); // те же люди, что и в разделе «Учителя»
 
   const processSteps = [
     { step: '01', title: t('about.process.s1title'), text: t('about.process.s1text') },
@@ -25,80 +22,74 @@ export default function AboutPage() {
 
   return (
     <main className="min-h-screen pt-24">
-      <div className="max-w-6xl mx-auto px-5 sm:px-8 py-10">
+      <div className="mx-auto max-w-6xl px-5 py-10 sm:px-8">
         {/* Header */}
-        <AnimSection className="max-w-2xl mb-14">
-          <p className="text-[#A66BFF] text-xs font-semibold uppercase tracking-widest mb-2">{t('about.tag')}</p>
-          <h1 className="font-display text-3xl sm:text-4xl font-bold text-white mb-4">
-            {t('about.title')}
-          </h1>
-          <p className="text-[#C9D2F5] leading-relaxed text-sm sm:text-base">
-            {t('about.description')}
-          </p>
+        <AnimSection className="mb-14 max-w-2xl">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-[#A66BFF]">{t('about.tag')}</p>
+          <h1 className="mb-4 font-display text-3xl font-bold text-white sm:text-4xl">{t('about.title')}</h1>
+          <p className="text-sm leading-relaxed text-white sm:text-base">{t('about.description')}</p>
         </AnimSection>
 
         {/* Stats */}
-        <AnimSection className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-14">
+        <AnimSection className="mb-14 grid grid-cols-2 gap-4 md:grid-cols-4">
           {stats.map(({ value, label }) => (
-            <div key={label} className="border border-[#2A2F7A] rounded-2xl p-5 bg-[#101336]/80 text-center">
-              <p className="font-display text-3xl font-bold gradient-text mb-1">{value}</p>
-              <p className="text-[#C9D2F5] text-sm">{label}</p>
+            <div key={label} className="rounded-2xl bg-[#101336] p-5 text-center">
+              <p className="mb-1 font-display text-3xl font-bold text-[#CDB2FF]">{value}</p>
+              <p className="text-sm text-white">{label}</p>
             </div>
           ))}
         </AnimSection>
 
         {/* Mission */}
         <AnimSection className="mb-14">
-          <div className="relative border border-[#A66BFF]/25 rounded-2xl p-7 sm:p-10 bg-gradient-to-br from-[#A66BFF]/10 to-transparent overflow-hidden">
-            <div className="absolute top-0 left-0 w-32 h-0.5 bg-gradient-to-r from-[#A66BFF]/70 to-transparent" />
-            <p className="text-[#A66BFF] text-xs font-semibold uppercase tracking-widest mb-3">{t('about.missionTag')}</p>
-            <p className="text-white text-lg sm:text-xl font-display leading-relaxed max-w-2xl">
-              {t('about.missionText')}
-            </p>
+          <div className="relative overflow-hidden rounded-2xl border border-[#2A2F7A] bg-[#101336] p-7 sm:p-10">
+            <div className="absolute left-0 top-0 h-0.5 w-32 bg-gradient-to-r from-[#A66BFF]/70 to-transparent" />
+            <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-[#A66BFF]">{t('about.missionTag')}</p>
+            <p className="max-w-2xl font-display text-lg leading-relaxed text-white sm:text-xl">{t('about.missionText')}</p>
           </div>
         </AnimSection>
 
-        {/* Team */}
+        {/* Команда: те же преподаватели, что в разделе «Учителя» */}
         <AnimSection className="mb-4">
-          <p className="text-[#A66BFF] text-xs font-semibold uppercase tracking-widest mb-2">{t('about.teamTag')}</p>
-          <h2 className="font-display text-2xl font-bold text-white mb-8">{t('about.teamTitle')}</h2>
+          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-[#A66BFF]">{t('about.teamTag')}</p>
+          <h2 className="mb-8 font-display text-2xl font-bold text-white">{t('about.teamTitle')}</h2>
         </AnimSection>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-14">
+        <div className="mb-14 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {team.map((m, i) => (
-            <AnimSection key={m.name} delay={i * 80}>
-              <div className="card-hover border border-[#2A2F7A] rounded-2xl p-5 bg-[#101336]/80 text-center">
-                <div className="w-14 h-14 rounded-full bg-[#A66BFF]/20 border border-[#A66BFF]/40 flex items-center justify-center text-[#A66BFF] mx-auto mb-3">
+            <AnimSection key={m.name + i} delay={i * 80}>
+              <Link to={`/teachers/${m.id}`} className="card-hover block h-full rounded-2xl border border-[#2A2F7A] bg-[#101336] p-5 text-center">
+                <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full border border-[#A66BFF]/40 bg-[#A66BFF]/15 text-[#CDB2FF]">
                   <RiUser3Line size={24} />
                 </div>
-                <p className="text-white font-semibold text-sm mb-0.5">{m.name}</p>
-                <p className="text-[#A66BFF] text-xs mb-1">{t(m.role)}</p>
-                <p className="text-[#C9D2F5] text-xs">{t(m.exp)}</p>
-              </div>
+                <p className="mb-0.5 text-sm font-semibold text-white">{m.name}</p>
+                <p className="mb-1 text-xs text-[#CDB2FF]">{m.role}</p>
+                <p className="text-xs text-[#C9D2F5]">{m.experience}</p>
+              </Link>
             </AnimSection>
           ))}
         </div>
 
         {/* Process */}
         <AnimSection className="mb-4">
-          <p className="text-[#A66BFF] text-xs font-semibold uppercase tracking-widest mb-2">{t('about.processTag')}</p>
-          <h2 className="font-display text-2xl font-bold text-white mb-8">{t('about.processTitle')}</h2>
+          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-[#A66BFF]">{t('about.processTag')}</p>
+          <h2 className="mb-8 font-display text-2xl font-bold text-white">{t('about.processTitle')}</h2>
         </AnimSection>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-14">
+        <div className="mb-14 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {processSteps.map(({ step, title, text }, i) => (
             <AnimSection key={step} delay={i * 80}>
-              <div className="border border-[#2A2F7A] rounded-2xl p-5 bg-[#101336]/80 relative overflow-hidden flex h-full flex-col justify-between">
+              <div className="relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-[#2A2F7A] bg-[#101336] p-5">
                 <div>
-                  <p className="font-display text-4xl font-bold text-[#A66BFF]/15 mb-3">{step}</p>
-                  <h3 className="text-white font-semibold text-sm mb-1.5">{title}</h3>
+                  <p className="mb-3 font-display text-4xl font-bold text-[#A66BFF]/30">{step}</p>
+                  <h3 className="mb-1.5 text-sm font-semibold text-white">{title}</h3>
                 </div>
-                <p className="text-[#C9D2F5] text-sm leading-relaxed">{text}</p>
+                <p className="text-sm leading-relaxed text-[#E6EAFF]">{text}</p>
               </div>
             </AnimSection>
           ))}
         </div>
 
         <AnimSection className="text-center">
-          <Link to="/contact" className="btn-primary violet-glow inline-flex items-center justify-center gap-2 mx-auto">
+          <Link to="/contact" className="btn-primary violet-glow mx-auto inline-flex items-center justify-center gap-2">
             {t('about.enrollCta')}
             <RiArrowRightLine size={16} />
           </Link>

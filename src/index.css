@@ -4,6 +4,8 @@
 @tailwind components;
 @tailwind utilities;
 
+input, textarea, select { font-size: 16px !important; }
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {

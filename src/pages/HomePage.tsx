@@ -3,9 +3,10 @@ import { RiArrowRightLine, RiStarFill, RiUser3Line } from 'react-icons/ri';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import AnimSection from '../components/AnimSection';
-import { getStats, getTestimonials } from '../data';
+import { getStats } from '../data';
 import { useCourses } from '../hooks/useCourses';
 import { useTeachers } from '../hooks/useTeachers';
+import { useTestimonials } from '../hooks/useTestimonials';
 import teacherPhoto from '../assets/teacher.png';
 
 const TECHS = ['React', 'TypeScript', 'Node.js', 'Python', 'Figma', 'PostgreSQL', 'Docker', 'Git', 'Next.js', 'MongoDB', 'Vue.js', 'Django'];
@@ -17,7 +18,7 @@ export default function HomePage() {
 
   const stats = getStats(t);
   const courses = useCourses();
-  const testimonials = getTestimonials(t);
+  const testimonials = useTestimonials(); // отзывы с бэкенда (админка → «Отзывы»)
   const teachers = useTeachers();
 
   useEffect(() => {
@@ -147,6 +148,8 @@ export default function HomePage() {
               const discountDate = course.discountEndsAt
                 ? course.discountEndsAt.split('-').reverse().join('.')
                 : t('courses.noDiscountDeadline');
+              const deadline = course.discountEndsAt ? `${t('courses.discountUntil')} ${discountDate}` : discountDate;
+              const Icon = course.icon;
 
               return (
                 <AnimSection key={course.id} delay={i * 60}>
@@ -160,57 +163,57 @@ export default function HomePage() {
                         navigate('/courses');
                       }
                     }}
-                    className={`group relative flex cursor-pointer items-center gap-6 overflow-hidden rounded-2xl border border-line bg-surface px-6 py-5 transition-all duration-300 hover:border-accent/60 hover:bg-surface2 ${course.discountPercent ? 'pt-12 sm:pt-5' : ''}`}
+                    className="group relative cursor-pointer overflow-hidden rounded-2xl border border-line bg-surface px-5 py-5 transition-all duration-300 hover:border-accent/60 hover:bg-surface2 sm:px-6"
                   >
-                    {course.discountPercent && (
-                      <div className="absolute right-0 top-0 z-10 flex items-center gap-1.5 rounded-bl-xl bg-brand px-3 py-1.5 text-white shadow-md sm:hidden">
-                        <span className="text-xs font-black">-{course.discountPercent}%</span>
-                        <span className="text-[9px] font-semibold">{course.discountEndsAt ? `${t('courses.discountUntil')} ${discountDate}` : discountDate}</span>
+                    <div className="flex items-center gap-4 sm:gap-6">
+                      <span className="w-9 shrink-0 select-none font-mono text-2xl font-bold text-accent/40 transition-colors duration-300 group-hover:text-accent sm:w-12 sm:text-4xl">
+                        {String(i + 1).padStart(2, '0')}
+                      </span>
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-line bg-night transition-colors group-hover:border-accent/60">
+                        <Icon size={18} className="text-accent-light" />
                       </div>
-                    )}
-                    <span className="w-12 shrink-0 select-none font-mono text-4xl font-black text-accent/40 transition-colors duration-300 group-hover:text-accent">
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-line bg-night text-lg transition-colors group-hover:border-accent/60">
-                      {(() => {
-                        const Icon = course.icon;
-                        return <Icon size={18} className="text-accent-light" />;
-                      })()}
+                      <div className="min-w-0 flex-1">
+                        <h3 className="text-base font-semibold text-white">{course.title}</h3>
+                        <p className="line-clamp-2 text-sm text-dim sm:line-clamp-1">{course.description}</p>
+                      </div>
+
+                      {/* десктоп: срок, уровень, цена справа */}
+                      <div className="hidden shrink-0 items-center gap-8 sm:flex">
+                        <div className="text-right">
+                          <p className="text-[10px] uppercase tracking-wider text-dim">{t('home.duration')}</p>
+                          <p className="text-sm font-semibold text-white">{course.duration}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-[10px] uppercase tracking-wider text-dim">{t('home.level')}</p>
+                          <p className="text-sm font-semibold text-accent-light">{course.level}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-[10px] uppercase tracking-wider text-dim">{t('home.price')}</p>
+                          {course.discountPercent && (
+                            <div className="mb-1 flex items-center justify-end gap-1.5 rounded-full bg-brand px-2.5 py-1 text-white shadow-md">
+                              <span className="text-[10px] font-bold">-{course.discountPercent}%</span>
+                              <span className="text-[9px]">{deadline}</span>
+                            </div>
+                          )}
+                          {course.oldPrice && <p className="text-[10px] text-dim line-through">{course.oldPrice}</p>}
+                          <p className={`font-bold text-white ${course.discountPercent ? 'text-base' : 'text-sm'}`}>{course.price}</p>
+                        </div>
+                      </div>
+                      <RiArrowRightLine size={18} className="hidden shrink-0 text-dim transition-all duration-200 group-hover:translate-x-1 group-hover:text-accent sm:block" />
                     </div>
-                    <div className="min-w-0 flex-1">
-                      <h3 className="text-base font-bold text-white">{course.title}</h3>
-                      <p className="truncate text-sm text-dim">{course.description}</p>
-                    </div>
-                    <div className="hidden shrink-0 items-center gap-8 sm:flex">
-                      <div className="text-right">
-                        <p className="text-[10px] uppercase tracking-wider text-dim">{t('home.duration')}</p>
-                        <p className="text-sm font-semibold text-white">{course.duration}</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-[10px] uppercase tracking-wider text-dim">{t('home.level')}</p>
-                        <p className="text-sm font-semibold text-accent-light">{course.level}</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-[10px] uppercase tracking-wider text-dim">{t('home.price')}</p>
-                        {course.discountPercent && (
-                          <div className="mb-1 hidden items-center justify-end gap-1.5 rounded-full bg-brand px-2.5 py-1 text-white shadow-md sm:flex">
-                            <span className="text-[10px] font-black">-{course.discountPercent}%</span>
-                            <span className="text-[9px]">{course.discountEndsAt ? `${t('courses.discountUntil')} ${discountDate}` : discountDate}</span>
-                          </div>
-                        )}
-                        {course.oldPrice && <p className="text-[10px] text-dim line-through">{course.oldPrice}</p>}
-                        {course.discountPercent && <p className="text-[9px] font-semibold text-accent-light">{t('courses.discountPrice')}</p>}
-                        <p className={`font-black text-white ${course.discountPercent ? 'text-base' : 'text-sm'}`}>{course.price}</p>
+
+                    {/* телефон: срок, уровень и цена отдельной строкой снизу */}
+                    <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-line pt-4 sm:hidden">
+                      <span className="text-xs text-dim">{course.duration}</span>
+                      <span className="rounded-full border border-line px-3 py-1 text-xs font-medium text-accent-light">{course.level}</span>
+                      {course.discountPercent && (
+                        <span className="rounded-full bg-brand px-2.5 py-1 text-[11px] font-semibold text-white">-{course.discountPercent}% · {deadline}</span>
+                      )}
+                      <div className="ml-auto flex flex-col items-end leading-tight">
+                        {course.oldPrice && <span className="text-[11px] text-dim line-through">{course.oldPrice}</span>}
+                        <span className="text-lg font-bold text-white">{course.price}</span>
                       </div>
                     </div>
-                    {course.discountPercent && (
-                      <div className="mt-3 flex items-baseline gap-2 sm:hidden">
-                        {course.oldPrice && <span className="text-xs text-dim line-through">{course.oldPrice}</span>}
-                        <span className="text-[10px] font-semibold text-accent-light">{t('courses.discountPrice')}</span>
-                        <span className="text-base font-black text-white">{course.price}</span>
-                      </div>
-                    )}
-                    <RiArrowRightLine size={18} className="shrink-0 text-dim transition-all duration-200 group-hover:translate-x-1 group-hover:text-accent" />
                   </div>
                 </AnimSection>
               );
@@ -303,6 +306,7 @@ export default function HomePage() {
       </section>
 
       {/* ─── TESTIMONIALS ─── */}
+      {testimonials.length > 0 && (
       <section className="bg-night py-24">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
           <AnimSection className="mb-14 text-center">
@@ -316,7 +320,7 @@ export default function HomePage() {
                 <div className="group relative flex h-full flex-col gap-5 overflow-hidden rounded-3xl border border-line bg-surface p-7 transition-all duration-300 hover:border-accent/50">
                   <span className="pointer-events-none absolute right-5 top-3 select-none text-7xl font-black leading-none text-accent/20 transition-colors group-hover:text-accent/30">"</span>
                   <div className="flex gap-0.5">
-                    {[...Array(5)].map((_, idx) => <RiStarFill key={idx} className="text-accent" size={13} />)}
+                    {[...Array(5)].map((_, idx) => <RiStarFill key={idx} className={idx < item.rating ? 'text-accent' : 'text-line'} size={13} />)}
                   </div>
                   <p className="relative z-10 flex-1 text-sm leading-relaxed text-soft">"{item.text}"</p>
                   <div className="flex items-center gap-3 border-t border-line pt-4">
@@ -334,6 +338,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ─── CTA ─── */}
       <section className="bg-night py-20">

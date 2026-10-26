@@ -13,7 +13,7 @@ export default function Navbar() {
   const langDropdownRef = useRef<HTMLDivElement | null>(null);
 
   const activeLang = i18n.resolvedLanguage?.startsWith('ky') ? 'ky' : 'ru';
-  
+
   const links = [
     { to: '/', label: t('nav.home') },
     { to: '/courses', label: t('nav.courses') },
@@ -58,167 +58,199 @@ export default function Navbar() {
     };
   }, [langDropdown]);
 
+  // Пока мобильное меню открыто: страница под ним не скроллится, Escape закрывает меню
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    document.addEventListener('keydown', onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
+  // Закрывать меню при смене страницы
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
+
   return (
-    <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'bg-[#020A2A]/95 backdrop-blur-xl border-b border-[#7C3AED]/20 shadow-lg shadow-black/40'
-          : 'bg-transparent'
-      }`}
-    >
-      <div className="max-w-6xl mx-auto px-5 sm:px-8 flex items-center justify-between h-16">
-
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="w-8 h-8 rounded-lg border border-[#7C3AED]/40 flex items-center justify-center transition-all duration-200 group-hover:border-[#A66BFF]/60"
-            style={{ background: 'linear-gradient(135deg, rgba(0,87,255,.25), rgba(166,107,255,.15))' }}>
-            <RiCodeSSlashLine className="text-[#A66BFF]" size={15} />
-          </div>
-          <span className="font-display font-bold text-white text-[17px] tracking-tight">
-              Ihsan<span style={{ background: 'linear-gradient(135deg, #A66BFF, #CDB2FF)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Academy</span>
-          </span>
-        </Link>
-
-        {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-1">
-          {links.map(({ to, label }) => {
-            const isActive = to === '/'
-              ? location.pathname === '/'
-              : location.pathname === to;
-
-            return (
-              <Link
-                key={to}
-                to={to}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  isActive
-                    ? 'text-[#A66BFF] bg-[#7C3AED]/15 border border-[#7C3AED]/30'
-                    : 'text-[#FFFFFF] hover:text-white hover:bg-white/5'
-                }`}
-              >
-                {label}
-              </Link>
-            );
-          })}
-        </nav>
-
-        <div className="hidden md:flex items-center gap-3">
-          {/* Language Dropdown */}
-          <div className="relative group" ref={langDropdownRef}>
-            <button
-              onClick={() => setLangDropdown(!langDropdown)}
-              className="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold text-white transition-all duration-200"
-              style={{
-                background: langDropdown 
-                  ? 'linear-gradient(135deg, #0057FF, #008CFF)' 
-                  : 'linear-gradient(135deg, rgba(0,87,255,.25), rgba(166,107,255,.15))',
-                border: langDropdown ? '1px solid #A66BFF' : '1px solid #7C3AED/30'
-              }}
-            >
-              <RiGlobalLine size={16} />
-              {activeLang === 'ru' ? 'РУ' : 'КГ'}
-            </button>
-
-            {langDropdown && (
-              <div className="absolute right-0 mt-2 w-48 rounded-lg border border-[#7C3AED]/30 bg-[#020A2A] shadow-xl shadow-black/50 overflow-hidden">
-                {languages.map((lang) => (
-                  <button
-                    key={lang.code}
-                    onClick={() => changeLanguage(lang.code)}
-                    className={`w-full flex items-center gap-3 px-4 py-3 text-sm transition-all duration-200 ${
-                      activeLang === lang.code
-                        ? 'bg-[#7C3AED]/20 text-[#A66BFF] border-l-2 border-[#A66BFF]'
-                        : 'text-[#FFFFFF] hover:bg-[#7C3AED]/10 hover:text-white'
-                    }`}
-                  >
-                    <span className="text-lg">{lang.flag}</span>
-                    <div className="flex-1 text-left">
-                      <p className="font-semibold">{lang.name}</p>
-                    </div>
-                    {activeLang === lang.code && (
-                      <div className="w-2 h-2 rounded-full bg-[#A66BFF]" />
-                    )}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* CTA Button */}
-          <Link
-            to="/contact"
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold text-white transition-all duration-200 hover:brightness-110 hover:scale-[1.03] active:scale-[0.97]"
-            style={{ background: 'linear-gradient(135deg, #0057FF, #008CFF)' }}
-          >
-              {t('cta.enroll')}
-          </Link>
-        </div>
-
-        {/* Burger */}
-        <button
-          onClick={() => setOpen(!open)}
-          className="md:hidden text-[#FFFFFF] hover:text-white p-1.5 rounded-lg hover:bg-white/5 transition-all duration-200"
-          aria-label={t('nav.menu')}
-        >
-          {open ? <RiCloseLine size={22} /> : <RiMenuLine size={22} />}
-        </button>
-      </div>
-
-      {/* Mobile menu */}
+    <>
+      {/* Подложка: клик по сайту вне меню закрывает каталог (только в адаптиве) */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ${
-          open ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+        onClick={() => setOpen(false)}
+        aria-hidden="true"
+        className={`md:hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
+          open ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+      />
+
+      <header
+        className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+          scrolled || open
+            ? 'bg-[#020A2A]/95 backdrop-blur-xl border-b border-[#7C3AED]/20 shadow-lg shadow-black/40'
+            : 'bg-transparent'
         }`}
       >
-        <div className="bg-[#020A2A]/98 backdrop-blur-xl border-t border-[#7C3AED]/20 px-5 py-4 flex flex-col gap-1">
-          {links.map(({ to, label }) => {
-            const isActive = to === '/'
-              ? location.pathname === '/'
-              : location.pathname === to;
+        <div className="max-w-6xl mx-auto px-5 sm:px-8 flex items-center justify-between h-16">
 
-            return (
-              <Link
-                key={to}
-                to={to}
-                onClick={() => setOpen(false)}
-                className={`py-2.5 px-3 rounded-xl text-sm font-medium transition-all duration-200 ${
-                  isActive
-                    ? 'text-[#A66BFF] bg-[#7C3AED]/15 border border-[#7C3AED]/25'
-                    : 'text-[#FFFFFF] hover:text-white hover:bg-white/5'
-                }`}
-              >
-                {label}
-              </Link>
-            );
-          })}
-          
-          {/* Mobile Language Selection */}
-          <div className="mt-3 pt-3 border-t border-[#7C3AED]/20 flex flex-col gap-2">
-            <p className="text-xs text-[#FFFFFF] uppercase font-semibold px-3">{t('nav.language')}</p>
-            {languages.map((lang) => (
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2.5 group">
+            <div className="w-8 h-8 rounded-lg border border-[#7C3AED]/40 flex items-center justify-center transition-all duration-200 group-hover:border-[#A66BFF]/60"
+              style={{ background: 'linear-gradient(135deg, rgba(0,87,255,.25), rgba(166,107,255,.15))' }}>
+              <RiCodeSSlashLine className="text-[#A66BFF]" size={15} />
+            </div>
+            <span className="font-display font-bold text-white text-[17px] tracking-tight">
+              Ihsan<span style={{ background: 'linear-gradient(135deg, #A66BFF, #CDB2FF)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Academy</span>
+            </span>
+          </Link>
+
+          {/* Desktop nav */}
+          <nav className="hidden md:flex items-center gap-1">
+            {links.map(({ to, label }) => {
+              const isActive = to === '/'
+                ? location.pathname === '/'
+                : location.pathname === to;
+
+              return (
+                <Link
+                  key={to}
+                  to={to}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    isActive
+                      ? 'text-[#A66BFF] bg-[#7C3AED]/15 border border-[#7C3AED]/30'
+                      : 'text-[#FFFFFF] hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  {label}
+                </Link>
+              );
+            })}
+          </nav>
+
+          <div className="hidden md:flex items-center gap-3">
+            {/* Language Dropdown */}
+            <div className="relative group" ref={langDropdownRef}>
               <button
-                key={lang.code}
-                onClick={() => changeLanguage(lang.code)}
-                className={`py-2.5 px-3 rounded-xl text-sm font-medium transition-all duration-200 ${
-                  activeLang === lang.code
-                    ? 'text-[#A66BFF] bg-[#7C3AED]/15 border border-[#7C3AED]/25'
-                    : 'text-[#FFFFFF] hover:text-white hover:bg-white/5'
-                }`}
+                onClick={() => setLangDropdown(!langDropdown)}
+                className="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold text-white transition-all duration-200"
+                style={{
+                  background: langDropdown
+                    ? 'linear-gradient(135deg, #0057FF, #008CFF)'
+                    : 'linear-gradient(135deg, rgba(0,87,255,.25), rgba(166,107,255,.15))',
+                  border: langDropdown ? '1px solid #A66BFF' : '1px solid #7C3AED/30'
+                }}
               >
-                {lang.flag} {lang.name}
+                <RiGlobalLine size={16} />
+                {activeLang === 'ru' ? 'РУ' : 'КГ'}
               </button>
-            ))}
+
+              {langDropdown && (
+                <div className="absolute right-0 mt-2 w-48 rounded-lg border border-[#7C3AED]/30 bg-[#020A2A] shadow-xl shadow-black/50 overflow-hidden">
+                  {languages.map((lang) => (
+                    <button
+                      key={lang.code}
+                      onClick={() => changeLanguage(lang.code)}
+                      className={`w-full flex items-center gap-3 px-4 py-3 text-sm transition-all duration-200 ${
+                        activeLang === lang.code
+                          ? 'bg-[#7C3AED]/20 text-[#A66BFF] border-l-2 border-[#A66BFF]'
+                          : 'text-[#FFFFFF] hover:bg-[#7C3AED]/10 hover:text-white'
+                      }`}
+                    >
+                      <span className="text-lg">{lang.flag}</span>
+                      <div className="flex-1 text-left">
+                        <p className="font-semibold">{lang.name}</p>
+                      </div>
+                      {activeLang === lang.code && (
+                        <div className="w-2 h-2 rounded-full bg-[#A66BFF]" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* CTA Button */}
+            <Link
+              to="/contact"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold text-white transition-all duration-200 hover:brightness-110 hover:scale-[1.03] active:scale-[0.97]"
+              style={{ background: 'linear-gradient(135deg, #0057FF, #008CFF)' }}
+            >
+              {t('cta.enroll')}
+            </Link>
           </div>
 
-          <Link
-            to="/contact"
-            className="mt-3 py-2.5 rounded-xl text-sm font-semibold text-white text-center transition-all duration-200"
-            style={{ background: 'linear-gradient(135deg, #0057FF, #008CFF)' }}
+          {/* Burger */}
+          <button
+            onClick={() => setOpen(!open)}
+            className="md:hidden text-[#FFFFFF] hover:text-white p-1.5 rounded-lg hover:bg-white/5 transition-all duration-200"
+            aria-label={t('nav.menu')}
           >
-            {t('cta.enroll')}
-          </Link>
+            {open ? <RiCloseLine size={22} /> : <RiMenuLine size={22} />}
+          </button>
         </div>
-      </div>
-    </header>
+
+        {/* Mobile menu */}
+        <div
+          className={`md:hidden overflow-hidden transition-all duration-300 ${
+            open ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+          }`}
+        >
+          <div className="bg-[#020A2A]/98 backdrop-blur-xl border-t border-[#7C3AED]/20 px-5 py-4 flex flex-col gap-1">
+            {links.map(({ to, label }) => {
+              const isActive = to === '/'
+                ? location.pathname === '/'
+                : location.pathname === to;
+
+              return (
+                <Link
+                  key={to}
+                  to={to}
+                  onClick={() => setOpen(false)}
+                  className={`py-2.5 px-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                    isActive
+                      ? 'text-[#A66BFF] bg-[#7C3AED]/15 border border-[#7C3AED]/25'
+                      : 'text-[#FFFFFF] hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  {label}
+                </Link>
+              );
+            })}
+
+            {/* Mobile Language Selection */}
+            <div className="mt-3 pt-3 border-t border-[#7C3AED]/20 flex flex-col gap-2">
+              <p className="text-xs text-[#FFFFFF] uppercase font-semibold px-3">{t('nav.language')}</p>
+              {languages.map((lang) => (
+                <button
+                  key={lang.code}
+                  onClick={() => changeLanguage(lang.code)}
+                  className={`py-2.5 px-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                    activeLang === lang.code
+                      ? 'text-[#A66BFF] bg-[#7C3AED]/15 border border-[#7C3AED]/25'
+                      : 'text-[#FFFFFF] hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  {lang.flag} {lang.name}
+                </button>
+              ))}
+            </div>
+
+            <Link
+              to="/contact"
+              onClick={() => setOpen(false)}
+              className="mt-3 py-2.5 rounded-xl text-sm font-semibold text-white text-center transition-all duration-200"
+              style={{ background: 'linear-gradient(135deg, #0057FF, #008CFF)' }}
+            >
+              {t('cta.enroll')}
+            </Link>
+          </div>
+        </div>
+      </header>
+    </>
   );
 }
